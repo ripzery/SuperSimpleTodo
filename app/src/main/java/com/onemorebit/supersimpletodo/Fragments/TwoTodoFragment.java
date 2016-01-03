@@ -81,6 +81,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_base_todo, container, false);
         binding.setCheckedCount(checkedCount);
+        binding.setTabNumber(TWO);
         initData();
         initRecyclerAdapter(TWO);
         initListener();

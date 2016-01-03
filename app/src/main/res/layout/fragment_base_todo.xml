@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data class="TodoBinding">
 
@@ -7,6 +8,10 @@
         <variable
             name="checkedCount"
             type="android.databinding.ObservableInt"/>
+
+        <variable
+            name="tabNumber"
+            type="int" />
     </data>
 
     <LinearLayout
@@ -31,12 +36,13 @@
             android:id="@+id/btnDelete"
             style="@style/DeleteButton"
             android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"
-            android:background="@drawable/btn_ripple_move"
+            android:background="@{tabNumber}"
             android:text="@string/btn_delete_item"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@{tabNumber}"/>
 
         <include
             layout="@layout/layout_enter_new_item"
+            bind:tabNumber="@{tabNumber}"
             android:id="@+id/layoutEnterNewItem"/>
 
     </LinearLayout>

@@ -78,17 +78,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             binding.setTabNumber(tabNumber);
             binding.cbItemChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    try {
-                        if (todoInteractionListener != null) {
-                            listItems.get(getAdapterPosition()).setChecked(isChecked);
-                            todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
-                        }
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
-                        e.printStackTrace();
-                    }
+                    checkItem(isChecked);
                 }
             });
+
+            binding.rippleItem.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    binding.cbItemChecked.performClick();
+                }
+            });
+        }
+
+        private void checkItem(boolean isChecked) {
+            try {
+                //binding.rippleItem.setRippleColor(ContextCompat.getColor(Contextor.getInstance().getContext(), !isChecked ?  R.color.colorPrimary : R.color.colorRipple));
+
+                if (todoInteractionListener != null) {
+                    listItems.get(getAdapterPosition()).setChecked(isChecked);
+                    todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
+                e.printStackTrace();
+            }
         }
 
         public void bind(final Item item) {

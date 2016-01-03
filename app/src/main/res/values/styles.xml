@@ -15,8 +15,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="AppThemeDark.CheckBox">
-        <item name="colorAccent">@color/colorRed</item>
+    <style name="EditText" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">@color/colorRed</item>
+        <item name="colorControlHighlight">@color/colorRed</item>
     </style>
+
 
 </resources>

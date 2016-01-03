@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="tabNumber"
+            type="int"/>
+    </data>
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -18,6 +26,9 @@
             android:layout_weight="1"
             android:inputType="textAutoComplete"
             android:lines="1"
+            app:editTextLine="@{tabNumber}"
+            android:textCursorDrawable="@null"
+            android:textColor="@{tabNumber}"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:hint="@string/et_enter_item_hint"/>
@@ -28,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_add"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="@{tabNumber}"/>
 
     </LinearLayout>
 

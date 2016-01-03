@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MainBinder mainBinder;
+    public MainBinder mainBinder;
     private ArrayList<Item> todoItems;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(
                     ContextCompat.getColor(MainActivity.this, tab.getPosition() == 0 ? R.color.colorAccent : R.color.colorRed));
+                mainBinder.pager.setCurrentItem(tab.getPosition());
             }
 
             @Override public void onTabUnselected(TabLayout.Tab tab) {
