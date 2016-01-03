@@ -1,18 +1,18 @@
 package com.onemorebit.supersimpletodo.Adapters;
 
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import com.onemorebit.supersimpletodo.Interfaces.ItemAdapterInterface;
 import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
+import com.onemorebit.supersimpletodo.Utils.Contextor;
 import com.onemorebit.supersimpletodo.Utils.Logger;
-import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.ItemBinder;
 import java.util.List;
 
@@ -20,11 +20,13 @@ import java.util.List;
  * Created by Euro on 1/2/16 AD.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> implements ItemAdapterInterface {
+    private boolean isTodo = true;
     private List<Item> listItems;
     private TodoInteractionListener todoInteractionListener;
 
-    public RecyclerAdapter(List<Item> listItem) {
+    public RecyclerAdapter(List<Item> listItem, boolean isTodo) {
         this.listItems = listItem;
+        this.isTodo = isTodo;
     }
 
     public List<Item> getListItems() {
@@ -32,7 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     }
 
     @Override public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_todo_item, parent, false);
+        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent, false);
         return new ItemViewHolder(inflate);
     }
 
@@ -72,27 +74,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         public ItemViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
+            binding.setIsTodo(isTodo);
+            binding.cbItemChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    try {
+                        if (todoInteractionListener != null) {
+                            listItems.get(getAdapterPosition()).setChecked(isChecked);
+                            todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         public void bind(final Item item) {
             binding.setTodo(item);
-
-            binding.tvItemDesc.setHorizontallyScrolling(false);
-            binding.tvItemDesc.setMaxLines(3);
-
-            if (todoInteractionListener != null) {
-                binding.cbItemChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        try {
-                            listItems.get(getAdapterPosition()).setChecked(isChecked);
-                            todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
-                        }catch (ArrayIndexOutOfBoundsException e){
-                            Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
         }
 
         public ItemBinder getBinding() {

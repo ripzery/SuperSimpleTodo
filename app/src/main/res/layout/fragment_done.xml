@@ -22,7 +22,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="@dimen/root_view_padding"
-            tools:listitem="@layout/layout_todo_item">
+            tools:listitem="@layout/layout_item">
 
         </android.support.v7.widget.RecyclerView>
 

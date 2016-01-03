@@ -36,26 +36,6 @@ public class DoneFragment extends Fragment {
         return fragment;
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override public void onStart() {
-        super.onStart();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override public void onStop() {
-        BusProvider.getInstance().unregister(this);
-        super.onStop();
-    }
-
-    @Subscribe public void onMovedItem(ArrayList<Item> items) {
-        doneItems.addAll(items);
-        adapter.setListItems(doneItems);
-        checkedCount.set(doneItems.size());
-    }
-
     private void initData() {
         doneItems = new ArrayList<>();
         doneItems = (ArrayList<Item>) SharePrefUtil.get(false);
@@ -87,6 +67,14 @@ public class DoneFragment extends Fragment {
         });
     }
 
+    private void initRecyclerAdapter() {
+        doneBinder.recyclerView.setHasFixedSize(true);
+        doneBinder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new RecyclerAdapter(doneItems, false);
+        doneBinder.recyclerView.setAdapter(adapter);
+        doneBinder.recyclerView.setItemAnimator(new SlideInRightAnimator());
+    }
+
     private void removeItemChecked() {
         for (int i = doneItems.size() - 1; i >= 0; i--) {
             if (doneItems.get(i).isChecked()) {
@@ -94,14 +82,6 @@ public class DoneFragment extends Fragment {
             }
         }
         checkedCount.set(0);
-    }
-
-    private void initRecyclerAdapter() {
-        doneBinder.recyclerView.setHasFixedSize(true);
-        doneBinder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new RecyclerAdapter(doneItems);
-        doneBinder.recyclerView.setAdapter(adapter);
-        doneBinder.recyclerView.setItemAnimator(new SlideInRightAnimator());
     }
 
     private void updateCheckedCount() {
@@ -112,6 +92,10 @@ public class DoneFragment extends Fragment {
         checkedCount.set(count);
     }
 
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         doneBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_done, container, false);
@@ -120,5 +104,21 @@ public class DoneFragment extends Fragment {
         initRecyclerAdapter();
         initListener();
         return doneBinder.getRoot();
+    }
+
+    @Override public void onStart() {
+        super.onStart();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override public void onStop() {
+        BusProvider.getInstance().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe public void onMovedItem(ArrayList<Item> items) {
+        doneItems.addAll(items);
+        adapter.setListItems(doneItems);
+        checkedCount.set(doneItems.size());
     }
 }

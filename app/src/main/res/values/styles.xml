@@ -15,4 +15,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="AppThemeDark.CheckBox">
+        <item name="colorAccent">@color/colorDeleteItem</item>
+    </style>
+
 </resources>

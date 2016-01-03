@@ -111,7 +111,7 @@ public class TodoFragment extends Fragment {
     private void initRecyclerAdapter() {
         todoBinder.recyclerView.setHasFixedSize(true);
         todoBinder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new RecyclerAdapter(todoItems);
+        adapter = new RecyclerAdapter(todoItems, true);
         todoBinder.recyclerView.setAdapter(adapter);
         todoBinder.recyclerView.setItemAnimator(new LandingAnimator());
     }
