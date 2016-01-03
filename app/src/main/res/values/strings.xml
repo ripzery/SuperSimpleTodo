@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SuperSimpleTodo</string>
+    <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
+    <string name="et_enter_item_hint">Enter todo item</string>
+    <string name="btn_add">Add</string>
+    <string name="share_pref_key_todo_list">todoLists</string>
+    <string name="snack_bar_et_warn_empty">Please fill description</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_todo_title">Todo</string>
+    <string name="tab_done_title">Done</string>
+</resources>
