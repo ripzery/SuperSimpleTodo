@@ -12,6 +12,7 @@ import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.Logger;
+import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.ItemBinder;
 import java.util.List;
 
@@ -19,8 +20,6 @@ import java.util.List;
  * Created by Euro on 1/2/16 AD.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> implements ItemAdapterInterface {
-    public static final int MODE_VIEW = 0;
-    public static final int MODE_ADD = 1;
     private List<Item> listItems;
     private TodoInteractionListener todoInteractionListener;
 
@@ -57,8 +56,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     }
 
     @Override public void addItem(Item item) {
-        listItems.add(item);
-        notifyDataSetChanged();
+        int position = listItems.size();
+        listItems.add(position, item);
+        notifyItemInserted(position);
     }
 
     public void setTodoInteractionListener(TodoInteractionListener listener) {
@@ -77,14 +77,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         public void bind(final Item item) {
             binding.setTodo(item);
 
-            binding.etItemDesc.setHorizontallyScrolling(false);
-            binding.etItemDesc.setMaxLines(3);
+            binding.tvItemDesc.setHorizontallyScrolling(false);
+            binding.tvItemDesc.setMaxLines(3);
 
             if (todoInteractionListener != null) {
                 binding.cbItemChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         try {
-                            todoInteractionListener.onCheckedChangeListener(isChecked, binding.etItemDesc);
+                            listItems.get(getAdapterPosition()).setChecked(isChecked);
+                            todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
                         }catch (ArrayIndexOutOfBoundsException e){
                             Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
                             e.printStackTrace();

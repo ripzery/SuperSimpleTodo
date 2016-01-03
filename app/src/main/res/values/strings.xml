@@ -4,10 +4,14 @@
     <string name="et_enter_item_hint">Enter todo item</string>
     <string name="btn_add">Add</string>
     <string name="share_pref_key_todo_list">todoLists</string>
+    <string name="share_pref_key_done_list">doneLists</string>
     <string name="snack_bar_et_warn_empty">Please fill description</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_todo_title">Todo</string>
     <string name="tab_done_title">Done</string>
+    <string name="btn_move_item">Move checked item to DONE</string>
+    <string name="btn_delete_item">Delete checked item</string>
+    <string name="btn_move_item_to_todo">Move checked item to TODO</string>
 </resources>

@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDataBinding() {
         mainBinder = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        setSupportActionBar(mainBinder.layoutToolbar.toolbar);
-        mainBinder.layoutToolbar.toolbar.setTitle(getString(R.string.app_name));
+        //setSupportActionBar(mainBinder.layoutToolbar.toolbar);
+        //mainBinder.layoutToolbar.toolbar.setTitle(getString(R.string.app_name));
     }
 }

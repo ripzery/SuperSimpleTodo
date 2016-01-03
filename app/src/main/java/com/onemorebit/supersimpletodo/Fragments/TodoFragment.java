@@ -1,6 +1,7 @@
 package com.onemorebit.supersimpletodo.Fragments;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableInt;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,21 +12,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.onemorebit.supersimpletodo.Adapters.RecyclerAdapter;
 import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
+import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 
 public class TodoFragment extends Fragment {
     private TodoBinding todoBinder;
     private RecyclerAdapter adapter;
     private ArrayList<Item> todoItems;
+    private ObservableInt checkedCount = new ObservableInt(0);
 
     public TodoFragment() {
         // Required empty public constructor
@@ -38,24 +44,34 @@ public class TodoFragment extends Fragment {
 
     private void initData() {
         todoItems = new ArrayList<>();
-        todoItems = (ArrayList<Item>) SharePrefUtil.get();
+        todoItems = (ArrayList<Item>) SharePrefUtil.get(true);
     }
 
     private void initListener() {
 
         adapter.setTodoInteractionListener(new TodoInteractionListener() {
-            @Override public void onCheckedChangeListener(boolean isChecked, EditText etChecked) {
+            @Override public void onCheckedChangeListener(boolean isChecked, TextView tvChecked) {
+                SharePrefUtil.update(true, todoItems);
+                updateCheckedCount();
                 if (isChecked) {
-                    etChecked.setPaintFlags(etChecked.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-                    //adapter.removeItem(todoItems.indexOf(item));
-                    //SharePrefUtil.update(todoItems);
-                }else{
-                    etChecked.setPaintFlags(etChecked.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 }
             }
 
             @Override public void onAddNewItem(Item item) {
                 addItem(item.getDescription());
+            }
+        });
+
+        todoBinder.btnMove.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                ArrayList<Item> doneList = new ArrayList<>();
+                addItemToDoneList(doneList);
+                removeItemChecked();
+                SharePrefUtil.update(true, todoItems);
+                BusProvider.getInstance().post(doneList);
             }
         });
 
@@ -75,11 +91,37 @@ public class TodoFragment extends Fragment {
         });
     }
 
+    private void removeItemChecked() {
+        for (int i = todoItems.size()-1 ; i >= 0; i--) {
+            if (todoItems.get(i).isChecked()) {
+                adapter.removeItem(i);
+            }
+        }
+        checkedCount.set(0);
+    }
+
+    private void addItemToDoneList(ArrayList<Item> doneList) {
+        for (Item item : todoItems) {
+            if (item.isChecked()) {
+                doneList.add(item);
+            }
+        }
+    }
+
     private void initRecyclerAdapter() {
         todoBinder.recyclerView.setHasFixedSize(true);
         todoBinder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new RecyclerAdapter(todoItems);
         todoBinder.recyclerView.setAdapter(adapter);
+        todoBinder.recyclerView.setItemAnimator(new LandingAnimator());
+    }
+
+    private void updateCheckedCount() {
+        int count = 0;
+        for (Item item : todoItems) {
+            if (item.isChecked()) count++;
+        }
+        checkedCount.set(count);
     }
 
     public void addItem(String description) {
@@ -101,7 +143,8 @@ public class TodoFragment extends Fragment {
         }
         todoBinder.layoutEnterNewItem.etEnterDesc.setText("");
         todoBinder.recyclerView.smoothScrollToPosition(todoItems.size());
-        SharePrefUtil.update(todoItems);
+        Logger.i(TodoFragment.class, "addItem_105: Todo Size before save " + todoItems.size());
+        SharePrefUtil.update(true, todoItems);
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +155,7 @@ public class TodoFragment extends Fragment {
         // Inflate the layout for this fragment
 
         todoBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_todo, container, false);
+        todoBinder.setCheckedCount(checkedCount);
         initData();
         initRecyclerAdapter();
         initListener();

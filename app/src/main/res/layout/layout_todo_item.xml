@@ -8,6 +8,7 @@
         <variable
             name="todo"
             type="com.onemorebit.supersimpletodo.Models.Item"/>
+
     </data>
 
     <LinearLayout
@@ -26,17 +27,13 @@
             android:layout_marginRight="@dimen/item_margin"
             android:checked="@{todo.checked}"/>
 
-        <EditText
-            android:id="@+id/etItemDesc"
+        <TextView
+            android:id="@+id/tvItemDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
             android:text="@{todo.description}"
             android:textSize="@dimen/text_item_desc"
             android:textColor="@android:color/primary_text_dark"
-            android:maxLength="100"
-            android:inputType="text"
-            android:imeOptions="actionNext"
             tools:text="@string/mockup_todo_item_desc"/>
 
     </LinearLayout>

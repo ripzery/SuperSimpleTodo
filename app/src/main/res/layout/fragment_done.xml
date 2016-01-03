@@ -1,13 +1,47 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.onemorebit.supersimpletodo.Fragments.DoneFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data class="DoneBinding">
+        <import type="android.view.View"/>
+
+        <variable
+            name="checkedCount"
+            type="android.databinding.ObservableInt"/>
+    </data>
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:orientation="vertical"
+        tools:showIn="@layout/activity_main"
+        tools:context="com.onemorebit.supersimpletodo.Fragments.TodoFragment">
 
-</FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="@dimen/root_view_padding"
+            tools:listitem="@layout/layout_todo_item">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/btnMove"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="@dimen/item_margin"
+            android:layout_marginStart="@dimen/item_margin"
+            android:layout_marginRight="@dimen/item_margin"
+            android:layout_marginEnd="@dimen/item_margin"
+            android:layout_marginBottom="@dimen/item_margin"
+            android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"
+            android:padding="@dimen/item_margin"
+            android:background="@drawable/btn_ripple_delete"
+            android:textColor="@color/colorDeleteItem"
+            android:text="@string/btn_delete_item"/>
+
+    </LinearLayout>
+
+</layout>
+
