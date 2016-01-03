@@ -64,6 +64,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         notifyItemInserted(position);
     }
 
+    public void insertItem(int position, Item item){
+        Logger.i(RecyclerAdapter.class, "insertItem_68: " + position);
+        listItems.add(position, item);
+        notifyItemInserted(position);
+    }
+
     public void setTodoInteractionListener(TodoInteractionListener listener) {
         this.todoInteractionListener = listener;
     }

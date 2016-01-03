@@ -11,7 +11,7 @@ public class Logger {
     public static final int INFORMATION = 3;
     public static final int WARN = 4;
     public static final int ERROR = 5;
-    private static final boolean ENABLED = false;
+    private static final boolean ENABLED = true;
 
     public static void e(Class x, String msg) {
         log(ERROR, x, msg);

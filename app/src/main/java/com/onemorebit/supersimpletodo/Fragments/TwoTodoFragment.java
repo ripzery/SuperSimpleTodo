@@ -3,6 +3,7 @@ package com.onemorebit.supersimpletodo.Fragments;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,10 @@ import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TwoTodoFragment extends BaseTodoFragment {
 
@@ -52,11 +57,25 @@ public class TwoTodoFragment extends BaseTodoFragment {
 
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                removeItemChecked();
+                final HashMap<Integer, Item> removedItem = removeItemChecked();
+                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.undo), new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            // Return Undo Item
+
+                            ArrayList<Integer> keys = new ArrayList<>(removedItem.keySet());
+                            Collections.sort(keys);
+                            for(int i = 0; i < removedItem.size() ; i++){
+                                adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
+                            }
+                            checkedCount.set(removedItem.size());
+                            SharePrefUtil.update(TWO, todoItems);
+                        }
+                    })
+                    .show();
                 SharePrefUtil.update(TWO, todoItems);
             }
         });
-
         binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 addItem(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), TWO);

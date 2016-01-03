@@ -12,6 +12,9 @@ import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 /**
@@ -47,13 +50,17 @@ public class BaseTodoFragment extends Fragment {
         checkedCount.set(count);
     }
 
-    protected void removeItemChecked() {
+    protected HashMap<Integer, Item> removeItemChecked() {
+        HashMap<Integer, Item> removedItem = new HashMap<>();
         for (int i = todoItems.size() - 1; i >= 0; i--) {
             if (todoItems.get(i).isChecked()) {
+                removedItem.put(i, todoItems.get(i));
                 adapter.removeItem(i);
             }
         }
+
         checkedCount.set(0);
+        return removedItem;
     }
 
     protected void initRecyclerAdapter(int tabNumber) {

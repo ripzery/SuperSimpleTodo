@@ -16,6 +16,10 @@ import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OneTodoFragment extends BaseTodoFragment {
 
@@ -53,12 +57,18 @@ public class OneTodoFragment extends BaseTodoFragment {
 
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                removeItemChecked();
+                final HashMap<Integer, Item> removedItem = removeItemChecked();
                 Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
                             // Return Undo Item
-                            Toast.makeText(getActivity(), "Undo it !", Toast.LENGTH_SHORT).show();
+                            ArrayList<Integer> keys = new ArrayList<>(removedItem.keySet());
+                            Collections.sort(keys);
+                            for(int i = 0; i < removedItem.size() ; i++){
+                                adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
+                            }
+                            checkedCount.set(removedItem.size());
+                            SharePrefUtil.update(ONE, todoItems);
                         }
                     })
                     .show();
