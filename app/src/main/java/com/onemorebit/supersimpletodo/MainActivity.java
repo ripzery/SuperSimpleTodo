@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
-import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.databinding.MainBinder;
 import java.util.ArrayList;
 
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinder.layoutTab.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(
-                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == 0 ? R.color.colorAccent : R.color.colorDeleteItem));
+                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == 0 ? R.color.colorAccent : R.color.colorRed));
             }
 
             @Override public void onTabUnselected(TabLayout.Tab tab) {

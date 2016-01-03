@@ -1,6 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data class="TodoBinding">
+
         <import type="android.view.View"/>
 
         <variable
@@ -14,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:showIn="@layout/activity_main"
-        tools:context="com.onemorebit.supersimpletodo.Fragments.TodoFragment">
+        tools:context=".Fragments.BaseTodoFragment">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -27,18 +28,12 @@
         </android.support.v7.widget.RecyclerView>
 
         <Button
-            android:id="@+id/btnMove"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginLeft="@dimen/item_margin"
-            android:layout_marginStart="@dimen/item_margin"
-            android:layout_marginRight="@dimen/item_margin"
-            android:layout_marginEnd="@dimen/item_margin"
+            android:id="@+id/btnDelete"
+            style="@style/DeleteButton"
             android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"
-            android:padding="@dimen/item_margin"
             android:background="@drawable/btn_ripple_move"
-            android:textColor="@color/colorAccent"
-            android:text="@string/btn_move_item"/>
+            android:text="@string/btn_delete_item"
+            android:textColor="@color/colorAccent"/>
 
         <include
             layout="@layout/layout_enter_new_item"

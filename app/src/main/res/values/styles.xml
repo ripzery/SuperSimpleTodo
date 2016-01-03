@@ -16,7 +16,7 @@
     </style>
 
     <style name="AppThemeDark.CheckBox">
-        <item name="colorAccent">@color/colorDeleteItem</item>
+        <item name="colorAccent">@color/colorRed</item>
     </style>
 
 </resources>

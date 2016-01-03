@@ -1,11 +1,17 @@
 package com.onemorebit.supersimpletodo.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.onemorebit.supersimpletodo.Fragments.DoneFragment;
-import com.onemorebit.supersimpletodo.Fragments.TodoFragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import com.onemorebit.supersimpletodo.Fragments.TwoTodoFragment;
+import com.onemorebit.supersimpletodo.Fragments.OneTodoFragment;
+import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.Logger;
 
 /**
@@ -16,7 +22,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
     private final int TAB_TODO = 0;
     private final int TAB_DONE = 1;
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Todo", "Done" };
+    private String tabTitles[] = new String[] { "Just don't forget", "Urgent" };
+    private int[] imageResId = new int[]{ R.mipmap.ic_image_wb_incandescent, R.mipmap.ic_action_done};
 
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -31,15 +38,21 @@ public class PagerAdapter extends FragmentPagerAdapter {
         Logger.i(PagerAdapter.class, "getItem_31: " + position);
         switch (position) {
             case TAB_TODO:
-                return TodoFragment.newInstance();
+                return OneTodoFragment.newInstance();
             case TAB_DONE:
-                return DoneFragment.newInstance();
+                return TwoTodoFragment.newInstance();
             default:
-                return TodoFragment.newInstance();
+                return OneTodoFragment.newInstance();
         }
     }
 
     @Override public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+        // Generate title based on item position
+        Drawable image = ContextCompat.getDrawable(context, imageResId[position]);
+        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("   " + tabTitles[position]);
+        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BASELINE);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
     }
 }

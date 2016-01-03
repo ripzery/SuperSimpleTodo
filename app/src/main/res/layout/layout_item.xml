@@ -11,8 +11,8 @@
             type="com.onemorebit.supersimpletodo.Models.Item"/>
 
         <variable
-            name="isTodo"
-            type="boolean" />
+            name="tabNumber"
+            type="int" />
 
     </data>
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="@dimen/root_view_padding"
-        tools:showIn="@layout/fragment_todo">
+        tools:showIn="@layout/fragment_base_todo">
 
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cbItemChecked"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
-            app:buttonTint="@{isTodo}"
+            app:buttonTint="@{tabNumber}"
             android:checked="@{todo.checked}"/>
 
         <TextView

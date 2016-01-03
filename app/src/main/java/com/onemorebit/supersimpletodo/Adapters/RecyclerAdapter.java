@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.Interfaces.ItemAdapterInterface;
 import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.Models.Item;
@@ -20,13 +21,13 @@ import java.util.List;
  * Created by Euro on 1/2/16 AD.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> implements ItemAdapterInterface {
-    private boolean isTodo = true;
+    private int tabNumber = BaseTodoFragment.ONE;
     private List<Item> listItems;
     private TodoInteractionListener todoInteractionListener;
 
-    public RecyclerAdapter(List<Item> listItem, boolean isTodo) {
+    public RecyclerAdapter(List<Item> listItem, int tabNumber) {
         this.listItems = listItem;
-        this.isTodo = isTodo;
+        this.tabNumber = tabNumber;
     }
 
     public List<Item> getListItems() {
@@ -74,7 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         public ItemViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-            binding.setIsTodo(isTodo);
+            binding.setTabNumber(tabNumber);
             binding.cbItemChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     try {

@@ -3,8 +3,8 @@
     <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
     <string name="et_enter_item_hint">Enter todo item</string>
     <string name="btn_add">Add</string>
-    <string name="share_pref_key_todo_list">todoLists</string>
-    <string name="share_pref_key_done_list">doneLists</string>
+    <string name="share_pref_key_one_list">OneList</string>
+    <string name="share_pref_key_two_list">TwoList</string>
     <string name="snack_bar_et_warn_empty">Please fill description</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -14,4 +14,7 @@
     <string name="btn_move_item">Move checked item to DONE</string>
     <string name="btn_delete_item">Delete checked item</string>
     <string name="btn_move_item_to_todo">Move checked item to TODO</string>
+    <string name="undo">Undo</string>
+    <string name="snack_remove_todo">Todo removed</string>
+    <string name="regex_todo_et_split">"  "</string>
 </resources>

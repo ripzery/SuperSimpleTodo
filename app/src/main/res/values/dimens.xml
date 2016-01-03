@@ -5,4 +5,5 @@
     <dimen name="root_view_padding">16dp</dimen>
     <dimen name="item_margin">16dp</dimen>
     <dimen name="text_item_desc">18sp</dimen>
+    <dimen name="btn_delete_height">56dp</dimen>
 </resources>
