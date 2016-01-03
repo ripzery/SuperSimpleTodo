@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class="TodoBinding">
 
@@ -35,10 +36,20 @@
         <Button
             android:id="@+id/btnDelete"
             style="@style/DeleteButton"
-            android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"
             android:background="@{tabNumber}"
             android:text="@string/btn_delete_item"
+            android:alpha="0"
+            app:animateVisibility="@{checkedCount.get}"
             android:textColor="@{tabNumber}"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/btnDelete"-->
+            <!--style="@style/DeleteButton"-->
+            <!--android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"-->
+            <!--android:background="@{tabNumber}"-->
+            <!--android:text="@string/btn_delete_item"-->
+            <!--app:-->
+            <!--android:textColor="@{tabNumber}"/>-->
 
         <include
             layout="@layout/layout_enter_new_item"

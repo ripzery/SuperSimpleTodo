@@ -24,7 +24,7 @@
         app:mrl_rippleOverlay="true"
         app:mrl_rippleDelayClick="false"
         app:mrl_rippleDuration="300"
-        app:mrl_rippleColor="@color/colorRipple" >
+        app:mrl_rippleColor="@{tabNumber}" >
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

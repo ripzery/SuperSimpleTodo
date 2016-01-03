@@ -4,9 +4,13 @@ import android.databinding.BindingAdapter;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.R;
 
@@ -14,6 +18,8 @@ import com.onemorebit.supersimpletodo.R;
  * Created by Euro on 1/3/16 AD.
  */
 public class TodoStateColorBinding {
+    private static YoYo.YoYoString btnDeleteAnimation;
+
     @BindingAdapter({ "app:buttonTint" }) public static void setStateColor(AppCompatCheckBox checkBox, int tabNumber) {
         checkBox.setSupportButtonTintList(ContextCompat.getColorStateList(Contextor.getInstance().getContext(), getColorView(tabNumber)));
     }
@@ -31,9 +37,17 @@ public class TodoStateColorBinding {
             .setColorFilter(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)), PorterDuff.Mode.SRC_ATOP);
     }
 
-    //@BindingAdapter({ "android:textCursorDrawable" }) public static void setTextCursorDrawable(EditText editText, int tabNumber) {
-    //    editText.setCur
-    //}
+    @BindingAdapter({ "app:mrl_rippleColor" }) public static void setRippleColor(MaterialRippleLayout materialRippleLayout, int tabNumber) {
+        materialRippleLayout.setRippleColor(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)));
+    }
+
+    @BindingAdapter({ "app:animateVisibility" }) public static void setAnimateVisibility(final View view, final int checkCount) {
+        final boolean isNotAnimateRepeat = view.getAlpha() < 1 || checkCount < 1;
+        final boolean isShouldAnimate = (isNotAnimateRepeat) && (btnDeleteAnimation == null || !(btnDeleteAnimation.isRunning() && checkCount > 0));
+        if(isShouldAnimate) {
+            btnDeleteAnimation = YoYo.with(checkCount > 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
+        }
+    }
 
     private static int getColorView(int tabNumber) {
         switch (tabNumber) {
