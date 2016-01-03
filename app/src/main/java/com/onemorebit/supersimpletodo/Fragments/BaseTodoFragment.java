@@ -67,7 +67,7 @@ public class BaseTodoFragment extends Fragment {
     protected void addItem(String description, int tabNumber) {
 
         if (description.isEmpty()) {
-            Snackbar.make(binding.getRoot(), R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(binding.coordinateLayout, R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
             return;
         }
 

@@ -54,7 +54,7 @@ public class OneTodoFragment extends BaseTodoFragment {
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 removeItemChecked();
-                Snackbar.make(binding.getRoot(), R.string.snack_remove_todo, Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
                             // Return Undo Item

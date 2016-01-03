@@ -12,7 +12,7 @@
 
         <variable
             name="tabNumber"
-            type="int" />
+            type="int"/>
     </data>
 
     <LinearLayout
@@ -33,30 +33,38 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/btnDelete"
-            style="@style/DeleteButton"
-            android:background="@{tabNumber}"
-            android:text="@string/btn_delete_item"
-            android:alpha="0"
-            app:animateVisibility="@{checkedCount.get}"
-            android:textColor="@{tabNumber}"/>
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!--<Button-->
-            <!--android:id="@+id/btnDelete"-->
-            <!--style="@style/DeleteButton"-->
-            <!--android:visibility="@{checkedCount.get() > 0 ? View.VISIBLE : View.GONE}"-->
-            <!--android:background="@{tabNumber}"-->
-            <!--android:text="@string/btn_delete_item"-->
-            <!--app:-->
-            <!--android:textColor="@{tabNumber}"/>-->
+            <LinearLayout
+                android:id="@+id/layoutInput"
+                android:orientation="vertical"
+                app:layout_behavior="com.onemorebit.supersimpletodo.Utils.MySnackbarBehavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/layout_enter_new_item"
-            bind:tabNumber="@{tabNumber}"
-            android:id="@+id/layoutEnterNewItem"/>
+                <Button
+                    android:id="@+id/btnDelete"
+                    style="@style/DeleteButton"
+                    android:background="@{tabNumber}"
+                    android:text="@string/btn_delete_item"
+                    app:animateVisibility="@{checkedCount.get}"
+                    android:enabled="@{checkedCount.get > 0 ? true : false}"
+                    android:textColor="@{tabNumber}"/>
+
+                <include
+                    layout="@layout/layout_enter_new_item"
+                    bind:tabNumber="@{tabNumber}"
+                    android:id="@+id/layoutEnterNewItem"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
+
 
 </layout>
 
