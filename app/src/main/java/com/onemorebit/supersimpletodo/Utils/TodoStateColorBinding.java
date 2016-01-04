@@ -33,8 +33,9 @@ public class TodoStateColorBinding {
     }
 
     @BindingAdapter({ "app:editTextLine" }) public static void setEditTextLineColor(EditText editText, int tabNumber) {
-        editText.getBackground()
-            .setColorFilter(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)), PorterDuff.Mode.SRC_ATOP);
+        //editText.getBackground()
+        //    .setColorFilter(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)), PorterDuff.Mode.SRC_ATOP);
+        editText.setBackground(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getDrawableEditText(tabNumber)));
     }
 
     @BindingAdapter({ "app:mrl_rippleColor" }) public static void setRippleColor(MaterialRippleLayout materialRippleLayout, int tabNumber) {
@@ -60,14 +61,14 @@ public class TodoStateColorBinding {
         }
     }
 
-    private static int getDrawableCursor(int tabNumber) {
+    private static int getDrawableEditText(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
-                return R.drawable.color_cursor_blue;
+                return R.drawable.todo_et_bg_blue2;
             case BaseTodoFragment.TWO:
-                return R.drawable.color_cursor_red;
+                return R.drawable.todo_et_bg_red2;
             default:
-                return R.drawable.color_cursor_blue;
+                return R.drawable.todo_et_bg_blue2;
         }
     }
 

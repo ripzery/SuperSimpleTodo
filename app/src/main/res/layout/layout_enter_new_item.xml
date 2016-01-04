@@ -15,8 +15,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:paddingLeft="@dimen/root_view_padding"
-        android:paddingStart="@dimen/root_view_padding"
+        android:layout_margin="@dimen/layout_input_margin"
+        android:layout_marginTop="@dimen/layout_input_margin"
+        android:layout_marginBottom="@dimen/layout_input_margin"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
@@ -24,8 +25,8 @@
             android:id="@+id/etEnterDesc"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:inputType="textAutoComplete"
-            android:lines="1"
+            android:inputType="text"
+            android:textSize="22sp"
             app:editTextLine="@{tabNumber}"
             android:textCursorDrawable="@null"
             android:textColor="@{tabNumber}"
@@ -35,9 +36,10 @@
 
         <Button
             android:id="@+id/btnAdd"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="@string/btn_add"
+            android:visibility="gone"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:textColor="@{tabNumber}"/>
 

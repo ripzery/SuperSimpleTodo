@@ -93,4 +93,9 @@ public class BaseTodoFragment extends Fragment {
         SharePrefUtil.update(tabNumber, todoItems);
     }
 
+    protected void initEditTextAttr(){
+        binding.layoutEnterNewItem.etEnterDesc.setMaxLines(3);
+        binding.layoutEnterNewItem.etEnterDesc.setHorizontallyScrolling(false);
+    }
+
 }

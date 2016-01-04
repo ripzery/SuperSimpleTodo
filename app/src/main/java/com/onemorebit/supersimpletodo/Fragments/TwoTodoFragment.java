@@ -58,7 +58,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 final HashMap<Integer, Item> removedItem = removeItemChecked();
-                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
                             // Return Undo Item
@@ -101,6 +101,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_base_todo, container, false);
         binding.setCheckedCount(checkedCount);
         binding.setTabNumber(TWO);
+        initEditTextAttr();
         initData();
         initRecyclerAdapter(TWO);
         initListener();
