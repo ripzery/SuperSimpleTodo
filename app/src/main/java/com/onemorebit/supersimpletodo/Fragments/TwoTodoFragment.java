@@ -101,6 +101,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_base_todo, container, false);
         binding.setCheckedCount(checkedCount);
         binding.setTabNumber(TWO);
+        tabNumber = TWO;
         initEditTextAttr();
         initData();
         initRecyclerAdapter(TWO);

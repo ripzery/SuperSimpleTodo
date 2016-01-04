@@ -8,4 +8,8 @@
     <dimen name="text_item_desc">18sp</dimen>
     <dimen name="btn_delete_height">56dp</dimen>
     <dimen name="cursor_width">3dp</dimen>
+    <dimen name="tab_title_text">14sp</dimen>
+    <dimen name="tab_image_margin">4dp</dimen>
+    <dimen name="tab_todo_count_margin">8dp</dimen>
+    <dimen name="tab_todo_count_text_size">14sp</dimen>
 </resources>

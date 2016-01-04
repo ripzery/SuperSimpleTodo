@@ -1,12 +1,14 @@
 package com.onemorebit.supersimpletodo.Utils;
 
+import android.content.res.ColorStateList;
 import android.databinding.BindingAdapter;
-import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.daimajia.androidanimations.library.Techniques;
@@ -45,9 +47,17 @@ public class TodoStateColorBinding {
     @BindingAdapter({ "app:animateVisibility" }) public static void setAnimateVisibility(final View view, final int checkCount) {
         final boolean isNotAnimateRepeat = view.getAlpha() < 1 || checkCount < 1;
         final boolean isShouldAnimate = (isNotAnimateRepeat) && (btnDeleteAnimation == null || !(btnDeleteAnimation.isRunning() && checkCount > 0));
-        if(isShouldAnimate) {
+        if (isShouldAnimate) {
             btnDeleteAnimation = YoYo.with(checkCount > 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
         }
+    }
+
+    @BindingAdapter({ "android:src" }) public static void setImageDrawable(ImageView imageView, Drawable drawable) {
+        imageView.setImageDrawable(drawable);
+    }
+
+    @BindingAdapter({ "app:tabTextColor" }) public static void setTabTextColor(TextView textView, int tabNumber) {
+        textView.setTextColor(getTabTextColor(tabNumber));
     }
 
     private static int getColorView(int tabNumber) {
@@ -58,6 +68,17 @@ public class TodoStateColorBinding {
                 return R.color.colorRed;
             default:
                 return R.color.colorAccent;
+        }
+    }
+
+    private static ColorStateList getTabTextColor(int tabNumber) {
+        switch (tabNumber) {
+            case BaseTodoFragment.ONE:
+                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
+            case BaseTodoFragment.TWO:
+                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_red);
+            default:
+                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
         }
     }
 

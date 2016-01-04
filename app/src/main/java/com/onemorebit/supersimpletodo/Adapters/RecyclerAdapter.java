@@ -90,7 +90,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
 
             binding.rippleItem.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    binding.cbItemChecked.performClick();
+                    binding.cbItemChecked.setChecked(!binding.cbItemChecked.isChecked());
                 }
             });
         }

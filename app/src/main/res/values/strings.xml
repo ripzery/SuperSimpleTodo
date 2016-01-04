@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">SuperSimpleTodo</string>
+    <string name="app_name">Quick To do</string>
     <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
-    <string name="et_enter_item_hint">Enter todo item</string>
+    <string name="et_enter_item_hint">Enter to do item</string>
     <string name="btn_add">Add</string>
     <string name="share_pref_key_one_list">OneList</string>
     <string name="share_pref_key_two_list">TwoList</string>
@@ -9,13 +9,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_todo_title">Todo</string>
+    <string name="tab_todo_title">To do</string>
     <string name="tab_done_title">Done</string>
     <string name="btn_move_item">Move checked item to DONE</string>
     <string name="btn_delete_item">Remove checked item</string>
     <string name="btn_move_item_to_todo">Move checked item to TODO</string>
     <string name="undo">Undo</string>
-    <string name="snack_remove_todo">Todo removed</string>
+    <string name="snack_remove_todo">To do removed</string>
     <string name="regex_todo_et_split">"  "</string>
     <string name="tab_one_title">Don\'t forget</string>
     <string name="tab_two_title">Urgent</string>

@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import com.onemorebit.supersimpletodo.Adapters.RecyclerAdapter;
 import com.onemorebit.supersimpletodo.Models.Item;
+import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
+import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
@@ -21,8 +24,9 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator;
  * Created by Euro on 1/3/16 AD.
  */
 public class BaseTodoFragment extends Fragment {
-    public static final int ONE = 1000;
-    public static final int TWO = 1001;
+    public static final int ONE = 0;
+    public static final int TWO = 1;
+    protected int tabNumber;
     protected TodoBinding binding;
     protected RecyclerAdapter adapter;
     protected ArrayList<Item> todoItems;
@@ -47,6 +51,7 @@ public class BaseTodoFragment extends Fragment {
         for (Item item : todoItems) {
             if (item.isChecked()) count++;
         }
+        BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size() - count, tabNumber));
         checkedCount.set(count);
     }
 
@@ -60,6 +65,7 @@ public class BaseTodoFragment extends Fragment {
         }
 
         checkedCount.set(0);
+        BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size(), tabNumber));
         return removedItem;
     }
 
