@@ -25,7 +25,6 @@ public class Contextor {
     }
 
     public Context getContext(){
-        if(context == null) throw new RuntimeException("Context is null");
         return context;
     }
 

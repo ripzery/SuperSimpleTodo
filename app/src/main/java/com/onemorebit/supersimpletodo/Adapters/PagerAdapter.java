@@ -22,12 +22,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
     private final int TAB_TODO = 0;
     private final int TAB_DONE = 1;
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Just don't forget", "Urgent" };
+    private String tabTitles[] = new String[] {};
     private int[] imageResId = new int[]{ R.mipmap.ic_image_wb_incandescent, R.mipmap.ic_action_done};
 
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
+        tabTitles = new String[]{ context.getString(R.string.tab_one_title), context.getString(R.string.tab_two_title) };
+
     }
 
     @Override public int getCount() {

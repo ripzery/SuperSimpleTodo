@@ -7,6 +7,5 @@
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
-        app:layout_scrollFlags="scroll|enterAlways"
         tools:showIn="@layout/activity_main"/>
 </layout>

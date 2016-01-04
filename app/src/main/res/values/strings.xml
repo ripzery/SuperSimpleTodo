@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SuperSimpleTodo</string>
     <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
-    <string name="et_enter_item_hint">Just another todo item..</string>
+    <string name="et_enter_item_hint">Enter todo item</string>
     <string name="btn_add">Add</string>
     <string name="share_pref_key_one_list">OneList</string>
     <string name="share_pref_key_two_list">TwoList</string>
@@ -17,4 +17,6 @@
     <string name="undo">Undo</string>
     <string name="snack_remove_todo">Todo removed</string>
     <string name="regex_todo_et_split">"  "</string>
+    <string name="tab_one_title">Don\'t forget</string>
+    <string name="tab_two_title">Urgent</string>
 </resources>
