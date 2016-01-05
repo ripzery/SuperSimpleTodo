@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Contextor;
+import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.databinding.LayoutTabColumnBinding;
 import com.onemorebit.supersimpletodo.databinding.MainBinder;
 import com.squareup.otto.Subscribe;
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCheckedUpdate(OttoCheckedCount ottoCheckedCount){
+        Logger.i(MainActivity.class, "onCheckedUpdate_80: " + ottoCheckedCount.count);
         String todoCount = ottoCheckedCount.count == 0 ? "" : "+"+ottoCheckedCount.count;
         tabColumnBindings.get(ottoCheckedCount.tabNumber).setTabTodoCount(todoCount);
     }

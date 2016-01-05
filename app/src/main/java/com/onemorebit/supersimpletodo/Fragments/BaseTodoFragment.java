@@ -70,20 +70,33 @@ public class BaseTodoFragment extends Fragment {
     }
 
     protected void initRecyclerAdapter(int tabNumber) {
+        /* tell recyclerview that every item has a fix size for better performance */
         binding.recyclerView.setHasFixedSize(true);
+
+        /* set simple vertical linear layout */
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        /* init current items in share preference*/
         adapter = new RecyclerAdapter(todoItems, tabNumber);
+
+        /* update to do count in tab */
+        BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size(), tabNumber));
+
+        /* set adapter and item animator*/
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setItemAnimator(new LandingAnimator());
     }
 
     protected void addItem(String description, int tabNumber) {
 
+
+        /* Check if description is empty or not */
         if (description.isEmpty()) {
             Snackbar.make(binding.coordinateLayout, R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
             return;
         }
 
+        /* Split to add multiple to do item at once*/
         final String[] split = description.split(getString(R.string.regex_todo_et_split));
         if (split.length > 1) {
             for (String s : split) {
@@ -94,8 +107,17 @@ public class BaseTodoFragment extends Fragment {
             Item item = new Item(false, description);
             adapter.addItem(item);
         }
+
+        /* reset string in input field */
         binding.layoutEnterNewItem.etEnterDesc.setText("");
+
+        /* scroll to last item when finish add item*/
         binding.recyclerView.smoothScrollToPosition(todoItems.size());
+
+        /* update count by send data to main activity*/
+        BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size(), tabNumber));
+
+        /* update share preference*/
         SharePrefUtil.update(tabNumber, todoItems);
     }
 
