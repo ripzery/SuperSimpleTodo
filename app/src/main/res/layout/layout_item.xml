@@ -47,7 +47,7 @@
                 android:id="@+id/tvItemDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{todo.description}"
+                app:htmlText="@{todo.description}"
                 android:textSize="@dimen/text_item_desc"
                 android:textColor="@{tabNumber}"
                 tools:text="@string/mockup_todo_item_desc"/>

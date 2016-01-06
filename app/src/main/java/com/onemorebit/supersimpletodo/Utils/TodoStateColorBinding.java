@@ -5,6 +5,7 @@ import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +59,11 @@ public class TodoStateColorBinding {
 
     @BindingAdapter({ "app:tabTextColor" }) public static void setTabTextColor(TextView textView, int tabNumber) {
         textView.setTextColor(getTabTextColor(tabNumber));
+    }
+
+    @BindingAdapter({ "app:htmlText"})
+    public static void setHtmlText(TextView textView, String htmlText){
+        textView.setText(Html.fromHtml(htmlText));
     }
 
     private static int getColorView(int tabNumber) {

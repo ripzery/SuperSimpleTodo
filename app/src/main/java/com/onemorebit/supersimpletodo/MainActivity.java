@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     public MainBinder mainBinder;
     private ArrayList<Item> todoItems;
     private ArrayList<LayoutTabColumnBinding> tabColumnBindings = new ArrayList<>();
+    public PagerAdapter adapter;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initInstance() {
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), this);
+        adapter = new PagerAdapter(getSupportFragmentManager(), this);
         mainBinder.pager.setAdapter(adapter);
         mainBinder.layoutTab.tabLayout.setupWithViewPager(mainBinder.pager);
 
