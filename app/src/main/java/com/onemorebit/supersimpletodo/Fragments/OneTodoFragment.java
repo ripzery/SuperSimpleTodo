@@ -10,16 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
 
 public class OneTodoFragment extends BaseTodoFragment {
 
@@ -51,7 +48,7 @@ public class OneTodoFragment extends BaseTodoFragment {
             }
 
             @Override public void onAddNewItem(Item item) {
-                addItem(item.getDescription(), ONE);
+                addCommand(item.getDescription(), ONE);
             }
         });
 
@@ -78,14 +75,14 @@ public class OneTodoFragment extends BaseTodoFragment {
 
         binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                addItem(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), ONE);
+                addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), ONE);
             }
         });
 
         binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addItem(v.getText().toString(), ONE);
+                    addCommand(v.getText().toString(), ONE);
                 }
                 return true;
             }

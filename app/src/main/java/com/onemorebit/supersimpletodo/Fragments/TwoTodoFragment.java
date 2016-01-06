@@ -16,9 +16,7 @@ import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
 
 public class TwoTodoFragment extends BaseTodoFragment {
 
@@ -51,7 +49,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
 
             @Override public void onAddNewItem(Item item) {
                 // Nothing here
-                addItem(item.getDescription(), TWO);
+                addCommand(item.getDescription(), TWO);
             }
         });
 
@@ -78,14 +76,14 @@ public class TwoTodoFragment extends BaseTodoFragment {
         });
         binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                addItem(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), TWO);
+                addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), TWO);
             }
         });
 
         binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addItem(v.getText().toString(), TWO);
+                    addCommand(v.getText().toString(), TWO);
                 }
                 return true;
             }

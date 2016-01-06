@@ -1,17 +1,13 @@
 package com.onemorebit.supersimpletodo.Fragments;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Adapters.RecyclerAdapter;
+import com.onemorebit.supersimpletodo.Listeners.DateTimePickerDialogListener;
 import com.onemorebit.supersimpletodo.MainActivity;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
@@ -19,11 +15,10 @@ import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Services.NotificationReceiver;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Command;
-import com.onemorebit.supersimpletodo.Utils.NotificationHelper;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
-import com.onemorebit.supersimpletodo.Utils.TimeHelper;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -100,9 +95,7 @@ public class BaseTodoFragment extends Fragment {
         binding.recyclerView.setItemAnimator(new LandingAnimator());
     }
 
-    protected void addItem(String description, final int tabNumber) {
-
-
+    protected void addCommand(String description, final int tabNumber) {
         /* Check if description is empty or not */
         if (description.isEmpty()) {
             Snackbar.make(binding.coordinateLayout, R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
@@ -110,28 +103,33 @@ public class BaseTodoFragment extends Fragment {
         }
 
         /* Check for command option */
-        final String timeOptionData = Command.process(description);
+        //final String timeOptionData = Command.process(description);
+        //
+        //if (!timeOptionData.isEmpty()) {
+        //    Snackbar.make(binding.coordinateLayout, "Set reminder at " + timeOptionData + " !", Snackbar.LENGTH_LONG).show();
+        //    description = Command.trimOptions(description);
+        //
+        //    int[] times = TimeHelper.getTimeInt(timeOptionData);
+        //    PagerAdapter pagerAdapter = ((MainActivity) getActivity()).adapter;
+        //
+        //    NotificationReceiver.broadcastNotificationIntent(tabNumber,
+        //        pagerAdapter.getPageTitle(tabNumber).toString(),
+        //        description,
+        //        pagerAdapter.getTabIcon(tabNumber),
+        //        times);
+        //
+        //    description = description + "\n <b> @" + timeOptionData + "</b>";
+        //}
 
-        if (!timeOptionData.isEmpty()) {
-            Snackbar.make(binding.coordinateLayout, "Set reminder at " + timeOptionData + " !", Snackbar.LENGTH_LONG).show();
-            description = Command.trimOptions(description);
+        PagerAdapter pagerAdapter = ((MainActivity) getActivity()).adapter;
 
-            int[] times = TimeHelper.getTimeInt(timeOptionData);
-            PagerAdapter pagerAdapter = ((MainActivity) getActivity()).adapter;
 
-            AlarmManager alarmMgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getContext(), NotificationReceiver.class);
-            intent.setAction(NotificationReceiver.ACTION_SET_NOTIFICATION);
-            intent.putExtra(NotificationReceiver.EXTRA_TITLE, pagerAdapter.getPageTitle(tabNumber).toString());
-            intent.putExtra(NotificationReceiver.EXTRA_CONTENT, description);
-            intent.putExtra(NotificationReceiver.EXTRA_IC, pagerAdapter.getTabIcon(tabNumber));
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+        /* Check for command option */
+        String option = Command.process(description);
+        action(option, description, tabNumber, pagerAdapter);
+    }
 
-            alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + TimeHelper.getTimeDiffFromNow(times[0], times[1]), alarmIntent);
-
-            description = description + "\n <b> @" + timeOptionData + "</b>";
-        }
-
+    private void addItem(String description, int tabNumber) {
         Item item = new Item(false, description);
         adapter.addItem(item);
 
@@ -146,6 +144,44 @@ public class BaseTodoFragment extends Fragment {
 
         /* update share preference*/
         SharePrefUtil.update(tabNumber, todoItems);
+    }
+
+    protected void action(final String option, final String description, final int tabNumber, final PagerAdapter pagerAdapter) {
+        switch (option) {
+            case Command.OPTION_REMIND:
+                DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity()) {
+                    @Override public void onDateTimeSet(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+                        /* Trim out command option */
+                        String htmlDescription = Command.trimOptions(description);
+
+                        /* Formatted dateTime */
+                        final String dateTime = dayOfMonth + "/" + monthOfYear + 1 + "/" + year + ", " + hourOfDay + ":" + minute;
+                        htmlDescription = htmlDescription + "<b> @<u>" + dateTime + "</u></b>";
+
+                        /* Add Item to list*/
+                        addItem(htmlDescription, tabNumber);
+
+                        /* Set calendar value */
+                        final Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+
+                        /* Broadcast Notification at specific time*/
+                        NotificationReceiver.broadcastNotificationIntent(tabNumber, pagerAdapter.getPageTitle(tabNumber).toString(), description,
+                            pagerAdapter.getTabIcon(tabNumber), calendar);
+
+                        /* Show snackbar to tell user */
+                        Snackbar.make(binding.coordinateLayout, "Set reminder at " + dateTime + " !", Snackbar.LENGTH_LONG).show();
+                    }
+                };
+
+                /* Show date time picker*/
+                dateTimePickerDialogListener.show();
+                break;
+            default:
+                addItem(description, tabNumber);
+        }
     }
 
     protected void initEditTextAttr() {

@@ -14,6 +14,7 @@ import com.onemorebit.supersimpletodo.R;
 /**
  * Created by Euro on 1/6/16 AD.
  */
+
 public class NotificationHelper {
     public static void createNotification(String title, String msg, int icon){
         Intent resultIntent = new Intent(Contextor.getInstance().getContext(), MainActivity.class);
@@ -23,7 +24,7 @@ public class NotificationHelper {
                 Contextor.getInstance().getContext(),
                 0,
                 resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_ONE_SHOT
             );
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
