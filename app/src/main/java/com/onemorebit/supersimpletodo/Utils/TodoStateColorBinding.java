@@ -66,7 +66,7 @@ public class TodoStateColorBinding {
         textView.setText(Html.fromHtml(htmlText));
     }
 
-    private static int getColorView(int tabNumber) {
+    public static int getColorView(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
                 return R.color.colorAccent;

@@ -149,7 +149,7 @@ public class BaseTodoFragment extends Fragment {
     protected void action(final String option, final String description, final int tabNumber, final PagerAdapter pagerAdapter) {
         switch (option) {
             case Command.OPTION_REMIND:
-                DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity()) {
+                DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity(), tabNumber) {
                     @Override public void onDateTimeSet(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
                         /* Trim out command option */
                         String htmlDescription = Command.trimOptions(description);
