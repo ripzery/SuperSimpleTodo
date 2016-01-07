@@ -66,8 +66,7 @@ public class BaseTodoFragment extends Fragment {
                         calendar.set(Calendar.DATE, tempCal.get(Calendar.DATE));
 
                         /* Broadcast Notification at specific time*/
-                        NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(),
-                            trimDescription,
+                        NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(), trimDescription,
                             pagerAdapter.getTabIcon(tabNumber), calendar, notificationId, tabNumber);
 
                         /* Show snackbar to tell user */
@@ -121,6 +120,10 @@ public class BaseTodoFragment extends Fragment {
         action(option, description, tabNumber, pagerAdapter);
     }
 
+    protected void handleEmptyState() {
+        binding.setIsEmpty(todoItems.isEmpty());
+    }
+
     protected void initEditTextAttr() {
         binding.layoutEnterNewItem.etEnterDesc.setMaxLines(3);
         binding.layoutEnterNewItem.etEnterDesc.setHorizontallyScrolling(false);
@@ -145,10 +148,7 @@ public class BaseTodoFragment extends Fragment {
     }
 
     // items = todoItems
-    protected void onUndoItem(ArrayList<Item> items){
-        /* store removed item */
-        final HashMap<Integer, Item> removedItem = removeItemChecked();
-
+    protected void onUndoItem(HashMap<Integer, Item> removedItem) {
         /* get all keys in keyset */
         ArrayList<Integer> keys = new ArrayList<>(removedItem.keySet());
 
@@ -156,9 +156,12 @@ public class BaseTodoFragment extends Fragment {
         Collections.sort(keys);
 
         /* insert each item in adapter in ascending order */
-        for(int i = 0; i < removedItem.size() ; i++){
+        for (int i = 0; i < removedItem.size(); i++) {
             adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
         }
+
+        /* Handle empty state */
+        handleEmptyState();
 
         /* set checked count = number item removed */
         checkedCount.set(removedItem.size());
@@ -178,6 +181,9 @@ public class BaseTodoFragment extends Fragment {
 
         /* after remove all checked item then checkedCount must be zero */
         checkedCount.set(0);
+
+        /* decide to show empty state */
+        handleEmptyState();
 
         /* update to do count in tab */
         BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size(), tabNumber));
@@ -199,6 +205,9 @@ public class BaseTodoFragment extends Fragment {
 
         /* reset string in input field */
         binding.layoutEnterNewItem.etEnterDesc.setText("");
+
+        /* handle empty state */
+        handleEmptyState();
 
         /* scroll to last item when finish add item*/
         binding.recyclerView.smoothScrollToPosition(todoItems.size());

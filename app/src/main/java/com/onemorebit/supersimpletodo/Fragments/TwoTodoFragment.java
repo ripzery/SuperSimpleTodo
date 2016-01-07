@@ -15,6 +15,7 @@ import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TwoTodoFragment extends BaseTodoFragment {
 
@@ -34,6 +35,7 @@ public class TwoTodoFragment extends BaseTodoFragment {
 
     private void initListener() {
 
+        /* handle whenever checked event is happen */
         adapter.setTodoInteractionListener(new TodoInteractionListener() {
             @Override public void onCheckedChangeListener(boolean isChecked, TextView tvChecked) {
                 SharePrefUtil.update(TWO, todoItems);
@@ -46,12 +48,14 @@ public class TwoTodoFragment extends BaseTodoFragment {
             }
         });
 
+        /* handle when delete item is clicked  */
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
+            final HashMap<Integer, Item> removedItem = removeItemChecked();
             @Override public void onClick(View v) {
                 Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            onUndoItem(todoItems);
+                            onUndoItem(removedItem);
                             SharePrefUtil.update(TWO, todoItems);
                         }
                     })
@@ -59,12 +63,15 @@ public class TwoTodoFragment extends BaseTodoFragment {
                 SharePrefUtil.update(TWO, todoItems);
             }
         });
+
+        /* handle when press added */
         binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), TWO);
             }
         });
 
+        /* handle when press done in the keyboard*/
         binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
