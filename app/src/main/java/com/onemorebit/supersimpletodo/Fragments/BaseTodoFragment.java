@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.Toast;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Adapters.RecyclerAdapter;
 import com.onemorebit.supersimpletodo.Listeners.DateTimePickerDialogListener;
@@ -12,13 +13,14 @@ import com.onemorebit.supersimpletodo.MainActivity;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
 import com.onemorebit.supersimpletodo.R;
-import com.onemorebit.supersimpletodo.Services.NotificationReceiver;
+import com.onemorebit.supersimpletodo.Services.NotificationService;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Command;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -77,6 +79,11 @@ public class BaseTodoFragment extends Fragment {
         return removedItem;
     }
 
+    // items = todoItems
+    protected void onUndoItem(ArrayList<Item> items){
+
+    }
+
     protected void initRecyclerAdapter(int tabNumber) {
         /* tell recyclerview that every item has a fix size for better performance */
         binding.recyclerView.setHasFixedSize(true);
@@ -98,7 +105,8 @@ public class BaseTodoFragment extends Fragment {
     protected void addCommand(String description, final int tabNumber) {
         /* Check if description is empty or not */
         if (description.isEmpty()) {
-            Snackbar.make(binding.coordinateLayout, R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(binding.coordinateLayout, R.string.snack_bar_et_warn_empty, Snackbar.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.snack_bar_et_warn_empty, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -129,8 +137,8 @@ public class BaseTodoFragment extends Fragment {
         action(option, description, tabNumber, pagerAdapter);
     }
 
-    private void addItem(String description, int tabNumber) {
-        Item item = new Item(false, description);
+    private void addItem(String description, int tabNumber, long notificationId) {
+        Item item = new Item(false, description, notificationId);
         adapter.addItem(item);
 
         /* reset string in input field */
@@ -152,27 +160,38 @@ public class BaseTodoFragment extends Fragment {
                 DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity(), tabNumber) {
                     @Override public void onDateTimeSet(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
                         /* Trim out command option */
-                        String htmlDescription = Command.trimOptions(description);
+                        String trimDescription = Command.trimOptions(description);
 
                         /* Formatted dateTime */
                         final String dateTime = dayOfMonth + "/" + monthOfYear + 1 + "/" + year + ", " + hourOfDay + ":" + minute;
-                        htmlDescription = htmlDescription + "<b> @<u>" + dateTime + "</u></b>";
-
-                        /* Add Item to list*/
-                        addItem(htmlDescription, tabNumber);
+                        String htmlDescription = trimDescription + "<b> @<u>" + dateTime + "</u></b>";
 
                         /* Set calendar value */
-                        final Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, monthOfYear, dayOfMonth);
+                        final Calendar tempCal = new GregorianCalendar();
+                        final long notificationId = System.currentTimeMillis();
+                        tempCal.setTimeInMillis(notificationId);
+
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.set(Calendar.DAY_OF_YEAR, tempCal.get(Calendar.DAY_OF_YEAR));
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, 0);
+                        calendar.set(Calendar.MILLISECOND, 0);
+                        calendar.set(Calendar.DATE, tempCal.get(Calendar.DATE));
 
                         /* Broadcast Notification at specific time*/
-                        NotificationReceiver.broadcastNotificationIntent(tabNumber, pagerAdapter.getPageTitle(tabNumber).toString(), description,
-                            pagerAdapter.getTabIcon(tabNumber), calendar);
+                        NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(),
+                            trimDescription,
+                            pagerAdapter.getTabIcon(tabNumber), calendar, notificationId, tabNumber);
 
                         /* Show snackbar to tell user */
                         Snackbar.make(binding.coordinateLayout, "Set reminder at " + dateTime + " !", Snackbar.LENGTH_LONG).show();
+
+                        /* Add Item to list*/
+                        addItem(htmlDescription, tabNumber, notificationId);
                     }
                 };
 
@@ -180,7 +199,7 @@ public class BaseTodoFragment extends Fragment {
                 dateTimePickerDialogListener.show();
                 break;
             default:
-                addItem(description, tabNumber);
+                addItem(description, tabNumber, 0);
         }
     }
 

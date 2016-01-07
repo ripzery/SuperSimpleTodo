@@ -45,18 +45,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp" />
+
                 <Button
                     android:id="@+id/btnDelete"
                     style="@style/DeleteButton"
                     android:background="@{tabNumber}"
                     android:text="@string/btn_delete_item"
-                    app:animateVisibility="@{checkedCount.get}"
+                    app:visibility="@{checkedCount.get}"
+                    android:layout_marginBottom="@dimen/item_margin"
+                    android:fontFamily="sans-serif-light"
                     android:enabled="@{checkedCount.get > 0 ? true : false}"
                     android:textColor="@{tabNumber}"/>
 
                 <include
                     layout="@layout/layout_enter_new_item"
                     bind:tabNumber="@{tabNumber}"
+                    bind:checkedCount="@{checkedCount}"
                     android:id="@+id/layoutEnterNewItem"/>
 
             </LinearLayout>

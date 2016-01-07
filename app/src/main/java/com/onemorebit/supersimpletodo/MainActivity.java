@@ -1,13 +1,16 @@
 package com.onemorebit.supersimpletodo;
 
+import android.app.AlarmManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
+import com.onemorebit.supersimpletodo.Utils.AlarmManagerUtil;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Contextor;
 import com.onemorebit.supersimpletodo.Utils.Logger;
@@ -28,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
         if(Contextor.getInstance().getContext() == null){
             Contextor.getInstance().init(this);
         }
-        //init data binding
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        //    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initDataBinding();
         initInstance();
@@ -79,8 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCheckedUpdate(OttoCheckedCount ottoCheckedCount){
-        Logger.i(MainActivity.class, "onCheckedUpdate_80: " + ottoCheckedCount.count);
-        String todoCount = ottoCheckedCount.count == 0 ? "" : "+"+ottoCheckedCount.count;
+        String todoCount = ottoCheckedCount.count == 0 ? "<b>All done</b>" : "<b>" + ottoCheckedCount.count + "</b> items";
         tabColumnBindings.get(ottoCheckedCount.tabNumber).setTabTodoCount(todoCount);
     }
 

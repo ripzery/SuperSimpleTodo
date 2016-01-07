@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import com.onemorebit.supersimpletodo.MainActivity;
 import com.onemorebit.supersimpletodo.R;
 
@@ -16,7 +17,7 @@ import com.onemorebit.supersimpletodo.R;
  */
 
 public class NotificationHelper {
-    public static void createNotification(String title, String msg, int icon){
+    public static void createNotification(String title, String msg, int icon, int notificationId, int tabNumber){
         Intent resultIntent = new Intent(Contextor.getInstance().getContext(), MainActivity.class);
 
         PendingIntent resultPendingIntent =
@@ -27,6 +28,8 @@ public class NotificationHelper {
                 PendingIntent.FLAG_ONE_SHOT
             );
 
+        Logger.i(NotificationHelper.class, "createNotification_30: ");
+
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mBuilder =
@@ -35,16 +38,17 @@ public class NotificationHelper {
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setSound(alarmSound)
+                .setColor(ContextCompat.getColor(Contextor.getInstance().getContext(), TodoStateColorBinding.getColorView(tabNumber)))
                 .setAutoCancel(true)
                 .setVibrate(new long[]{1000})
                 .setContentText(msg);
 
 
         NotificationManager notificationManager = (NotificationManager) Contextor.getInstance().getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, mBuilder.build());
+        notificationManager.notify(notificationId, mBuilder.build());
 
     }
 }

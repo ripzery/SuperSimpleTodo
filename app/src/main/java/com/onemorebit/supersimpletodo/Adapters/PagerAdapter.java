@@ -64,7 +64,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
         tabBinding.setTabNumber(position);
         tabBinding.setTabDrawable(ContextCompat.getDrawable(context, imageResId[position]));
         tabBinding.setTabTitle(tabTitles[position]);
-        //tabBinding.setTabTodoCount("+3");
+        tabBinding.setTabTodoCount("");
         return tabBinding;
     }
 

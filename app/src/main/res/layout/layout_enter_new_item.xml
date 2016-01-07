@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
 
     <data>
         <variable
             name="tabNumber"
-            type="int"/>
+            type="int" />
+        <variable
+            name="checkedCount"
+            type="android.databinding.ObservableInt" />
     </data>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/layout_input_margin"
+        app:visibility="@{checkedCount.get}"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
@@ -24,6 +29,7 @@
             android:layout_weight="1"
             android:inputType="text"
             android:textSize="18sp"
+            android:fontFamily="sans-serif-light"
             app:editTextLine="@{tabNumber}"
             android:textCursorDrawable="@null"
             android:textColor="@{tabNumber}"
@@ -36,6 +42,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="@string/btn_add"
+            android:visibility="gone"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:textColor="@{tabNumber}"/>
 

@@ -65,6 +65,7 @@ public class OneTodoFragment extends BaseTodoFragment {
                                 adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
                             }
                             checkedCount.set(removedItem.size());
+                            onUndoItem(todoItems);
                             SharePrefUtil.update(ONE, todoItems);
                         }
                     })

@@ -49,7 +49,21 @@ public class TodoStateColorBinding {
         final boolean isNotAnimateRepeat = view.getAlpha() < 1 || checkCount < 1;
         final boolean isShouldAnimate = (isNotAnimateRepeat) && (btnDeleteAnimation == null || !(btnDeleteAnimation.isRunning() && checkCount > 0));
         if (isShouldAnimate) {
-            btnDeleteAnimation = YoYo.with(checkCount > 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
+
+            if(view instanceof Button) {
+                btnDeleteAnimation = YoYo.with(checkCount > 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
+            }else{
+                YoYo.with(checkCount == 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
+            }
+
+        }
+    }
+
+    @BindingAdapter({"app:visibility"}) public static void setVisibility(View view, int checkedCount){
+        if(view instanceof Button){
+            view.setVisibility(checkedCount == 0 ? View.GONE : View.VISIBLE);
+        }else{
+            view.setVisibility(checkedCount > 0 ? View.GONE : View.VISIBLE);
         }
     }
 

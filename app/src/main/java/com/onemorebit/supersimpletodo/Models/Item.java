@@ -11,10 +11,20 @@ import com.onemorebit.supersimpletodo.BR;
 public class Item extends BaseObservable{
     private boolean isChecked;
     private String description;
+    private long notificationId;
 
-    public Item(boolean isChecked, String description) {
+    public Item(boolean isChecked, String description, long notificationId) {
         this.isChecked = isChecked;
         this.description = description;
+        this.notificationId = notificationId;
+    }
+
+    public long getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(long notificationId) {
+        this.notificationId = notificationId;
     }
 
     @Bindable

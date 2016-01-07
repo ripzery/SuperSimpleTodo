@@ -24,6 +24,7 @@
         app:mrl_rippleOverlay="true"
         app:mrl_rippleDelayClick="false"
         app:mrl_rippleDuration="300"
+        tools:showIn="@layout/fragment_base_todo"
         app:mrl_rippleColor="@{tabNumber}" >
 
         <LinearLayout
@@ -48,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:htmlText="@{todo.description}"
+                android:fontFamily="sans-serif-thin"
                 android:textSize="@dimen/text_item_desc"
                 android:textColor="@{tabNumber}"
                 tools:text="@string/mockup_todo_item_desc"/>
