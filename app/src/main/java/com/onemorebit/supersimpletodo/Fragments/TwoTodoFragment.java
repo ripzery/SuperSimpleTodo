@@ -27,8 +27,8 @@ public class TwoTodoFragment extends BaseTodoFragment {
         return fragment;
     }
 
+    /* initilized to do items from share preference */
     private void initData() {
-        todoItems = new ArrayList<>();
         todoItems = (ArrayList<Item>) SharePrefUtil.get(TWO);
     }
 

@@ -29,13 +29,14 @@ public class OneTodoFragment extends BaseTodoFragment {
         return fragment;
     }
 
+    /* initilized to do items from share preference */
     private void initData() {
-        todoItems = new ArrayList<>();
         todoItems = (ArrayList<Item>) SharePrefUtil.get(ONE);
     }
 
     private void initListener() {
 
+        /* handle whenever checked event is happen */
         adapter.setTodoInteractionListener(new TodoInteractionListener() {
             @Override public void onCheckedChangeListener(boolean isChecked, TextView tvChecked) {
                 SharePrefUtil.update(ONE, todoItems);
@@ -48,6 +49,7 @@ public class OneTodoFragment extends BaseTodoFragment {
             }
         });
 
+        /* handle when delete item is clicked  */
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
@@ -62,12 +64,14 @@ public class OneTodoFragment extends BaseTodoFragment {
             }
         });
 
+        /* handle when press added */
         binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), ONE);
             }
         });
 
+        /* handle when press done in the keyboard*/
         binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
