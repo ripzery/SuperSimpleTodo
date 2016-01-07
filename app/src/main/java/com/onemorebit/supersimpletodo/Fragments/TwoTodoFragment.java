@@ -50,8 +50,9 @@ public class TwoTodoFragment extends BaseTodoFragment {
 
         /* handle when delete item is clicked  */
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-            final HashMap<Integer, Item> removedItem = removeItemChecked();
+
             @Override public void onClick(View v) {
+                final HashMap<Integer, Item> removedItem = removeItemChecked();
                 Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
