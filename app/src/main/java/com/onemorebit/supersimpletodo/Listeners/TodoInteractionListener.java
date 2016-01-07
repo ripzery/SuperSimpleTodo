@@ -11,5 +11,4 @@ import com.onemorebit.supersimpletodo.Models.Item;
  */
 public interface TodoInteractionListener {
     void onCheckedChangeListener(boolean isChecked, TextView tvChecked);
-    void onAddNewItem(Item item);
 }

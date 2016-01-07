@@ -46,25 +46,13 @@ public class OneTodoFragment extends BaseTodoFragment {
                     tvChecked.setPaintFlags(tvChecked.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 }
             }
-
-            @Override public void onAddNewItem(Item item) {
-                addCommand(item.getDescription(), ONE);
-            }
         });
 
         binding.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                final HashMap<Integer, Item> removedItem = removeItemChecked();
                 Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            // Return Undo Item
-                            ArrayList<Integer> keys = new ArrayList<>(removedItem.keySet());
-                            Collections.sort(keys);
-                            for(int i = 0; i < removedItem.size() ; i++){
-                                adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
-                            }
-                            checkedCount.set(removedItem.size());
                             onUndoItem(todoItems);
                             SharePrefUtil.update(ONE, todoItems);
                         }
