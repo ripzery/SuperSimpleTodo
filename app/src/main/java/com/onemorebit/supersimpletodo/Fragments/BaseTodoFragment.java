@@ -313,13 +313,25 @@ public class BaseTodoFragment extends Fragment {
     }
 
     private MaterialDialog initEditDialog(final Item item) {
+
+        /* Initialize new dateTime object */
         final DateTime newDateTime = new DateTime(0, 0, 0, 0, 0);
+
+        /* Inflate edit dialog layout */
         final LayoutDialogEditBinding inflate = DataBindingUtil.inflate(getLayoutInflater(null), R.layout.layout_dialog_edit, null, false);
+
+        /* Initialize EditText */
         inflate.etEnterDesc.setHorizontallyScrolling(false);
         inflate.etEnterDesc.setMaxLines(3);
-        inflate.setIsNotify(item.getNotificationId() != 0);
+
+        /* Databinding : setIsNotify to set visibility of ivClose and alpha */
+        //inflate.setIsNotify(item.getNotificationId() != 0);
+
+        /* Databinding : setItem to set description and time text*/
         inflate.setItem(item);
 
+
+        /* set listener when click textview time */
         inflate.tvTime.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity(), tabNumber) {
@@ -329,9 +341,11 @@ public class BaseTodoFragment extends Fragment {
                         /* Formatted dateTime */
                         final String dateTimeString = dateTime.getFormattedTime();
 
+                        /* Set tvTime to new selected dateTime */
                         inflate.tvTime.setText(dateTimeString);
 
-                        inflate.setIsNotify(dateTime.getNotificationId() > 0);
+                        /* Set new notificationId */
+                        inflate.setItem(new Item(item.isChecked(), item.getDescription(), System.currentTimeMillis()));
                     }
                 };
 
@@ -342,7 +356,7 @@ public class BaseTodoFragment extends Fragment {
 
         inflate.ivClose.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                inflate.setIsNotify(false);
+                /* Reset notification id */
                 inflate.setItem(new Item(item.isChecked(), item.getTrimHtmlTime(), 0));
             }
         });
@@ -351,13 +365,18 @@ public class BaseTodoFragment extends Fragment {
 
         final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
             @Override public void onShow(DialogInterface dialog) {
+
+                /* set caret to last position of edittext enter */
                 inflate.etEnterDesc.setSelection(inflate.etEnterDesc.getText().length());
+
+                /* show keyboard */
                 imm.showSoftInput(inflate.etEnterDesc, InputMethodManager.SHOW_IMPLICIT);
             }
         };
 
         final MaterialDialog.SingleButtonCallback cancelCallback = new MaterialDialog.SingleButtonCallback() {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                /* hide keyboard */
                 imm.hideSoftInputFromWindow(inflate.etEnterDesc.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         };
@@ -365,24 +384,27 @@ public class BaseTodoFragment extends Fragment {
         final MaterialDialog.SingleButtonCallback submitCallback = new MaterialDialog.SingleButtonCallback() {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-
                 if(inflate.tvTime.getText().toString().equals("Not set")){
-                    // cancel notification
+                    /* cancel notification */
                     AlarmManagerUtil.cancelReminder(item.getNotificationId());
 
+                    /* set new description */
                     item.setDescription(inflate.etEnterDesc.getText().toString());
 
+                    /* reset notification */
                     item.setNotificationId(0);
                 }
                 else if (item.getDateString().equals(inflate.tvTime.getText().toString())) {
-                    // if not change time
+                    /* if date time is not changed */
 
+                    /* update description */
                     item.setDescription(inflate.etEnterDesc.getText().toString());
                 } else {
-                    // if change time
+                    /* if date time has been edited */
 
                     final String description = inflate.etEnterDesc.getText().toString();
 
+                    /* set html description*/
                     String htmlDescription = description + " <b> @<u>" + newDateTime.getFormattedTime() + "</u></b>";
 
                     /* Set calendar value */
@@ -395,8 +417,13 @@ public class BaseTodoFragment extends Fragment {
                     /* Show snackbar to tell user */
                     Snackbar.make(binding.coordinateLayout, "Set reminder at " + newDateTime.getFormattedTime() + " !", Snackbar.LENGTH_LONG).show();
 
-                    /* Edit Item */
+                    /* remove old notification Id */
+                    AlarmManagerUtil.cancelReminder(item.getNotificationId());
+
+                    /* set new notification Id */
                     item.setNotificationId(newDateTime.getNotificationId());
+
+                    /* set new html description*/
                     item.setDescription(htmlDescription);
                 }
 

@@ -8,10 +8,6 @@
         <import type="android.view.View"/>
 
         <variable
-            name="isNotify"
-            type="boolean"/>
-
-        <variable
             name="item"
             type="com.onemorebit.supersimpletodo.Models.Item"/>
     </data>
@@ -66,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold|italic"
                 android:text="@{item.getDateString}"
-                android:alpha='@{isNotify ? 1.0f : 0.26f}'
+                android:alpha='@{isgetNotificationId > 0 ? 1.0f : 0.26f}'
                 tools:text=" : 07/01/2016, 08:53"/>
 
             <ImageView
@@ -75,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/item_margin"
                 android:alpha="0.26"
-                android:visibility="@{isNotify ? View.VISIBLE : View.GONE}"
+                android:visibility="@{item.getNotificationId > 0 ? View.VISIBLE : View.GONE}"
                 android:src="@mipmap/ic_close"/>
 
         </LinearLayout>
