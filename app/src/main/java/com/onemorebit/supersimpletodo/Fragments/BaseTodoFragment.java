@@ -325,7 +325,7 @@ public class BaseTodoFragment extends Fragment {
         inflate.etEnterDesc.setMaxLines(3);
 
         /* Databinding : setIsNotify to set visibility of ivClose and alpha */
-        //inflate.setIsNotify(item.getNotificationId() != 0);
+        inflate.setIsNotify(item.getNotificationId() != 0);
 
         /* Databinding : setItem to set description and time text*/
         inflate.setItem(item);
@@ -344,8 +344,7 @@ public class BaseTodoFragment extends Fragment {
                         /* Set tvTime to new selected dateTime */
                         inflate.tvTime.setText(dateTimeString);
 
-                        /* Set new notificationId */
-                        inflate.setItem(new Item(item.isChecked(), item.getDescription(), System.currentTimeMillis()));
+                        inflate.setIsNotify(dateTime.getNotificationId() > 0);
                     }
                 };
 
@@ -384,7 +383,7 @@ public class BaseTodoFragment extends Fragment {
         final MaterialDialog.SingleButtonCallback submitCallback = new MaterialDialog.SingleButtonCallback() {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                if(inflate.tvTime.getText().toString().equals("Not set")){
+                if (inflate.tvTime.getText().toString().equals("Not set")) {
                     /* cancel notification */
                     AlarmManagerUtil.cancelReminder(item.getNotificationId());
 
@@ -393,12 +392,16 @@ public class BaseTodoFragment extends Fragment {
 
                     /* reset notification */
                     item.setNotificationId(0);
-                }
-                else if (item.getDateString().equals(inflate.tvTime.getText().toString())) {
+                } else if (item.getDateString().equals(inflate.tvTime.getText().toString())) {
                     /* if date time is not changed */
 
+                    final String description = inflate.etEnterDesc.getText().toString();
+
+                    /* set html description*/
+                    String htmlDescription = description + " <b> @<u>" + inflate.tvTime.getText().toString() + "</u></b>";
+
                     /* update description */
-                    item.setDescription(inflate.etEnterDesc.getText().toString());
+                    item.setDescription(htmlDescription);
                 } else {
                     /* if date time has been edited */
 
