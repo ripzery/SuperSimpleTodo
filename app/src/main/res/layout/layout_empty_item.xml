@@ -22,15 +22,17 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:alpha="0.26"
             android:orientation="vertical"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/ivImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_empty_view_height"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_action_note_add"/>
+                android:src="@mipmap/ic_action_note_add"/>
             <TextView
                 android:id="@+id/emptyList"
                 android:layout_width="wrap_content"

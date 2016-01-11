@@ -2,6 +2,7 @@ package com.onemorebit.supersimpletodo.Listeners;
 
 import android.app.Activity;
 import android.support.v4.content.ContextCompat;
+import com.onemorebit.supersimpletodo.Models.DateTime;
 import com.onemorebit.supersimpletodo.Utils.TodoStateColorBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -34,7 +35,7 @@ public abstract class DateTimePickerDialogListener implements DatePickerDialog.O
         dpd.show(activity.getFragmentManager(), "DatePickerDialog");
     }
 
-    public abstract void onDateTimeSet(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute);
+    public abstract void onDateTimeSet(DateTime dateTime);
 
     @Override public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
@@ -52,6 +53,6 @@ public abstract class DateTimePickerDialogListener implements DatePickerDialog.O
     @Override public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         this.hourOfDay = hourOfDay;
         this.minute = minute;
-        onDateTimeSet(year, monthOfYear, dayOfMonth, hourOfDay, minute);
+        onDateTimeSet(new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minute));
     }
 }

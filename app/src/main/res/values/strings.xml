@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">QuickDo</string>
     <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
-    <string name="et_enter_item_hint">Enter to do item</string>
+    <string name="et_enter_item_hint">Enter task description</string>
     <string name="btn_add">Add</string>
     <string name="share_pref_key_one_list">OneList</string>
     <string name="share_pref_key_two_list">TwoList</string>
@@ -20,4 +20,7 @@
     <string name="tab_one_title">Don\'t forget</string>
     <string name="tab_two_title">Urgent</string>
     <string name="empty_state_string">Add some task</string>
+
+    <string name="dialog_edit_title">Edit</string>
+    <string name="menu_remove">REMOVE</string>
 </resources>

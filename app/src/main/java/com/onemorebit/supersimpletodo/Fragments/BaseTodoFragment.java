@@ -1,27 +1,46 @@
 package com.onemorebit.supersimpletodo.Fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.databinding.ObservableInt;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Adapters.RecyclerAdapter;
 import com.onemorebit.supersimpletodo.Listeners.DateTimePickerDialogListener;
+import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
 import com.onemorebit.supersimpletodo.MainActivity;
+import com.onemorebit.supersimpletodo.Models.DateTime;
 import com.onemorebit.supersimpletodo.Models.Item;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
 import com.onemorebit.supersimpletodo.R;
 import com.onemorebit.supersimpletodo.Services.NotificationService;
+import com.onemorebit.supersimpletodo.Utils.AlarmManagerUtil;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Command;
+import com.onemorebit.supersimpletodo.Utils.DialogBuilder;
+import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
+import com.onemorebit.supersimpletodo.databinding.LayoutDialogEditBinding;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -36,41 +55,34 @@ public class BaseTodoFragment extends Fragment {
     protected RecyclerAdapter adapter;
     protected ArrayList<Item> todoItems;
     protected ObservableInt checkedCount = new ObservableInt(0);
+    private PagerAdapter pagerAdapter;
+    private MenuItem removeMenu;
 
-    protected void action(final String option, final String description, final int tabNumber, final PagerAdapter pagerAdapter) {
+    protected void action(final String option, final String description, final int tabNumber) {
         switch (option) {
             case Command.OPTION_REMIND:
                 DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity(), tabNumber) {
-                    @Override public void onDateTimeSet(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+                    @Override public void onDateTimeSet(DateTime dateTime) {
                         /* Trim out command option */
                         String trimDescription = Command.trimOptions(description);
 
                         /* Formatted dateTime */
-                        final String dateTime = dayOfMonth + "/" + monthOfYear + 1 + "/" + year + ", " + hourOfDay + ":" + minute;
-                        String htmlDescription = trimDescription + "<b> @<u>" + dateTime + "</u></b>";
+                        final String dateTimeString = dateTime.getFormattedTime();
+
+                        String htmlDescription = trimDescription + "<b> @<u>" + dateTimeString + "</u></b>";
 
                         /* Set calendar value */
-                        final Calendar tempCal = new GregorianCalendar();
-                        final long notificationId = System.currentTimeMillis();
-                        tempCal.setTimeInMillis(notificationId);
+                        Calendar calendar = dateTime.getCalendar();
 
-                        Calendar calendar = new GregorianCalendar();
-                        calendar.set(Calendar.DAY_OF_YEAR, tempCal.get(Calendar.DAY_OF_YEAR));
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        calendar.set(Calendar.MONTH, monthOfYear);
-                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        calendar.set(Calendar.MINUTE, minute);
-                        calendar.set(Calendar.SECOND, 0);
-                        calendar.set(Calendar.MILLISECOND, 0);
-                        calendar.set(Calendar.DATE, tempCal.get(Calendar.DATE));
+                        /* Get notification id */
+                        long notificationId = dateTime.getNotificationId();
 
                         /* Broadcast Notification at specific time*/
                         NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(), trimDescription,
-                            pagerAdapter.getTabIcon(tabNumber), calendar, notificationId, tabNumber);
+                            pagerAdapter.getTabIcon(tabNumber), calendar.getTimeInMillis(), notificationId, tabNumber);
 
                         /* Show snackbar to tell user */
-                        Snackbar.make(binding.coordinateLayout, "Set reminder at " + dateTime + " !", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(binding.coordinateLayout, "Set reminder at " + dateTimeString + " !", Snackbar.LENGTH_LONG).show();
 
                         /* Add Item to list*/
                         addItem(htmlDescription, tabNumber, notificationId);
@@ -112,21 +124,86 @@ public class BaseTodoFragment extends Fragment {
         //    description = description + "\n <b> @" + timeOptionData + "</b>";
         //}
 
-        PagerAdapter pagerAdapter = ((MainActivity) getActivity()).adapter;
-
-
-        /* Check for command option */
+        /* get command option */
         String option = Command.process(description);
-        action(option, description, tabNumber, pagerAdapter);
+
+        /* send action base on command option */
+        action(option, description, tabNumber);
     }
 
     protected void handleEmptyState() {
         binding.setIsEmpty(todoItems.isEmpty());
     }
 
+    /* initialize to do items from share preference */
+    protected void initData(int tabNumber) {
+        todoItems = (ArrayList<Item>) SharePrefUtil.get(tabNumber);
+
+        /* handle empty state */
+        handleEmptyState();
+    }
+
     protected void initEditTextAttr() {
         binding.layoutEnterNewItem.etEnterDesc.setMaxLines(3);
         binding.layoutEnterNewItem.etEnterDesc.setHorizontallyScrolling(false);
+    }
+
+    protected void initListener(final int tabNumber) {
+
+        /* handle whenever checked event is happen */
+        adapter.setTodoInteractionListener(new TodoInteractionListener() {
+            @Override public void onCheckedChange(boolean isChecked, TextView tvChecked) {
+                SharePrefUtil.update(tabNumber, todoItems);
+                updateCheckedCount(todoItems);
+                if (isChecked) {
+                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                }
+            }
+
+            @Override public void onItemLongClick(int index, final Item item) {
+                // show dialog or open new fragment?
+
+                MaterialDialog editDialog = initEditDialog(item);
+
+                editDialog.show();
+            }
+        });
+
+        /* handle when delete item is clicked  */
+        binding.btnDelete.setOnClickListener(new View.OnClickListener() {
+
+            @Override public void onClick(View v) {
+                final HashMap<Integer, Item> removedItem = removeItemChecked();
+                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
+                    .setAction(getString(R.string.undo), new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            onUndoItem(removedItem);
+                            SharePrefUtil.update(tabNumber, todoItems);
+                        }
+                    })
+                    .show();
+                SharePrefUtil.update(tabNumber, todoItems);
+            }
+        });
+
+        /* handle when press added */
+        binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), tabNumber);
+            }
+        });
+
+        /* handle when press done in the keyboard*/
+        binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    addCommand(v.getText().toString(), tabNumber);
+                }
+                return true;
+            }
+        });
     }
 
     protected void initRecyclerAdapter(int tabNumber) {
@@ -142,7 +219,7 @@ public class BaseTodoFragment extends Fragment {
         /* update to do count in tab */
         BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size(), tabNumber));
 
-        /* set adapter and item animator*/
+        /* set adapter and item animator */
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setItemAnimator(new LandingAnimator());
     }
@@ -157,14 +234,23 @@ public class BaseTodoFragment extends Fragment {
 
         /* insert each item in adapter in ascending order */
         for (int i = 0; i < removedItem.size(); i++) {
-            adapter.insertItem(keys.get(i), removedItem.get(keys.get(i)));
+            final Item item = removedItem.get(keys.get(i));
+            adapter.insertItem(keys.get(i), item);
+
+            /* reset reminder */
+            /* Broadcast Notification at specific time*/
+            if (item.getNotificationId() != 0 && item.isShouldNotify()) {
+                NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(), item.getTrimHtmlTime(),
+                    pagerAdapter.getTabIcon(tabNumber), item.getDateFromString().getTime(), item.getNotificationId(), tabNumber);
+            }
         }
 
         /* Handle empty state */
         handleEmptyState();
 
         /* set checked count = number item removed */
-        checkedCount.set(removedItem.size());
+        //checkedCount.set(removedItem.size());
+        updateCheckedCount(todoItems);
     }
 
     protected HashMap<Integer, Item> removeItemChecked() {
@@ -174,13 +260,19 @@ public class BaseTodoFragment extends Fragment {
         /* loop check which items is checked, so remove them */
         for (int i = todoItems.size() - 1; i >= 0; i--) {
             if (todoItems.get(i).isChecked()) {
+
+                /* cancel reminder if item check has set */
+                if (todoItems.get(i).getNotificationId() != 0) {
+                    AlarmManagerUtil.cancelReminder(todoItems.get(i).getNotificationId());
+                }
+
                 removedItem.put(i, todoItems.get(i));
                 adapter.removeItem(i);
             }
         }
 
         /* after remove all checked item then checkedCount must be zero */
-        checkedCount.set(0);
+        updateCheckedCount(todoItems);
 
         /* decide to show empty state */
         handleEmptyState();
@@ -197,6 +289,7 @@ public class BaseTodoFragment extends Fragment {
         }
         BusProvider.getInstance().post(new OttoCheckedCount(todoItems.size() - count, tabNumber));
         checkedCount.set(count);
+        updateRemoveMenuView(count);
     }
 
     private void addItem(String description, int tabNumber, long notificationId) {
@@ -219,7 +312,117 @@ public class BaseTodoFragment extends Fragment {
         SharePrefUtil.update(tabNumber, todoItems);
     }
 
+    private MaterialDialog initEditDialog(final Item item) {
+        final DateTime newDateTime = new DateTime(0, 0, 0, 0, 0);
+        final LayoutDialogEditBinding inflate = DataBindingUtil.inflate(getLayoutInflater(null), R.layout.layout_dialog_edit, null, false);
+        inflate.etEnterDesc.setHorizontallyScrolling(false);
+        inflate.etEnterDesc.setMaxLines(3);
+        inflate.setIsNotify(item.getNotificationId() != 0);
+        inflate.setItem(item);
+
+        inflate.tvTime.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                DateTimePickerDialogListener dateTimePickerDialogListener = new DateTimePickerDialogListener(getActivity(), tabNumber) {
+                    @Override public void onDateTimeSet(DateTime dateTime) {
+                        newDateTime.setDateTime(dateTime);
+
+                        /* Formatted dateTime */
+                        final String dateTimeString = dateTime.getFormattedTime();
+
+                        inflate.tvTime.setText(dateTimeString);
+
+                        inflate.setIsNotify(dateTime.getNotificationId() > 0);
+                    }
+                };
+
+                /* Show date time picker*/
+                dateTimePickerDialogListener.show();
+            }
+        });
+
+        inflate.ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                inflate.setIsNotify(false);
+                inflate.setItem(new Item(item.isChecked(), item.getTrimHtmlTime(), 0));
+            }
+        });
+
+        final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        final DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
+            @Override public void onShow(DialogInterface dialog) {
+                inflate.etEnterDesc.setSelection(inflate.etEnterDesc.getText().length());
+                imm.showSoftInput(inflate.etEnterDesc, InputMethodManager.SHOW_IMPLICIT);
+            }
+        };
+
+        final MaterialDialog.SingleButtonCallback cancelCallback = new MaterialDialog.SingleButtonCallback() {
+            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                imm.hideSoftInputFromWindow(inflate.etEnterDesc.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        };
+
+        final MaterialDialog.SingleButtonCallback submitCallback = new MaterialDialog.SingleButtonCallback() {
+            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+
+                if(inflate.tvTime.getText().toString().equals("Not set")){
+                    // cancel notification
+                    AlarmManagerUtil.cancelReminder(item.getNotificationId());
+
+                    item.setDescription(inflate.etEnterDesc.getText().toString());
+
+                    item.setNotificationId(0);
+                }
+                else if (item.getDateString().equals(inflate.tvTime.getText().toString())) {
+                    // if not change time
+
+                    item.setDescription(inflate.etEnterDesc.getText().toString());
+                } else {
+                    // if change time
+
+                    final String description = inflate.etEnterDesc.getText().toString();
+
+                    String htmlDescription = description + " <b> @<u>" + newDateTime.getFormattedTime() + "</u></b>";
+
+                    /* Set calendar value */
+                    Calendar calendar = newDateTime.getCalendar();
+
+                    /* Broadcast Notification at specific time */
+                    NotificationService.broadcastNotificationIntent(pagerAdapter.getPageTitle(tabNumber).toString(), description,
+                        pagerAdapter.getTabIcon(tabNumber), calendar.getTimeInMillis(), newDateTime.getNotificationId(), tabNumber);
+
+                    /* Show snackbar to tell user */
+                    Snackbar.make(binding.coordinateLayout, "Set reminder at " + newDateTime.getFormattedTime() + " !", Snackbar.LENGTH_LONG).show();
+
+                    /* Edit Item */
+                    item.setNotificationId(newDateTime.getNotificationId());
+                    item.setDescription(htmlDescription);
+                }
+
+                SharePrefUtil.update(tabNumber, todoItems);
+                imm.hideSoftInputFromWindow(inflate.etEnterDesc.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        };
+
+        final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(), cancelCallback,
+            submitCallback);
+
+        editDialog.setOnShowListener(showListener);
+
+        return editDialog;
+    }
+
+    private void updateRemoveMenuView(int count) {
+        try {
+            removeMenu.setVisible(count > 0);
+        } catch (NullPointerException e) {
+            Logger.i(BaseTodoFragment.class, "removeMenu has not been initialized yet");
+        }
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -228,8 +431,34 @@ public class BaseTodoFragment extends Fragment {
         BusProvider.getInstance().register(this);
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        pagerAdapter = ((MainActivity) getActivity()).adapter;
+    }
+
     @Override public void onStop() {
         BusProvider.getInstance().unregister(this);
         super.onStop();
+    }
+
+    @Override public void onPrepareOptionsMenu(Menu menu) {
+        removeMenu = menu.findItem(R.id.remove);
+
+        removeMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override public boolean onMenuItemClick(MenuItem item) {
+                final HashMap<Integer, Item> removedItem = removeItemChecked();
+                String snackMsg = removedItem.size() + (removedItem.size() > 1 ? " items" : " item") + " has been removed";
+                Snackbar.make(binding.coordinateLayout, snackMsg, Snackbar.LENGTH_SHORT).setAction(getString(R.string.undo), new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        onUndoItem(removedItem);
+                        SharePrefUtil.update(tabNumber, todoItems);
+                    }
+                }).show();
+                SharePrefUtil.update(tabNumber, todoItems);
+                return true;
+            }
+        });
+
+        updateCheckedCount(todoItems);
     }
 }

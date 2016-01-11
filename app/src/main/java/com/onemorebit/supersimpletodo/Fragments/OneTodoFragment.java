@@ -28,61 +28,7 @@ public class OneTodoFragment extends BaseTodoFragment {
         return fragment;
     }
 
-    /* initilized to do items from share preference */
-    private void initData() {
-        todoItems = (ArrayList<Item>) SharePrefUtil.get(ONE);
 
-        handleEmptyState();
-    }
-
-    private void initListener() {
-
-        /* handle whenever checked event is happen */
-        adapter.setTodoInteractionListener(new TodoInteractionListener() {
-            @Override public void onCheckedChangeListener(boolean isChecked, TextView tvChecked) {
-                SharePrefUtil.update(ONE, todoItems);
-                updateCheckedCount(todoItems);
-                if (isChecked) {
-                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                }
-            }
-        });
-
-        /* handle when delete item is clicked  */
-        binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                final HashMap<Integer, Item> removedItem = removeItemChecked();
-                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
-                    .setAction(getString(R.string.undo), new View.OnClickListener() {
-                        @Override public void onClick(View v) {
-                            onUndoItem(removedItem);
-                            SharePrefUtil.update(ONE, todoItems);
-                        }
-                    })
-                    .show();
-                SharePrefUtil.update(ONE, todoItems);
-            }
-        });
-
-        /* handle when press added */
-        binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), ONE);
-            }
-        });
-
-        /* handle when press done in the keyboard*/
-        binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addCommand(v.getText().toString(), ONE);
-                }
-                return true;
-            }
-        });
-    }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -92,9 +38,9 @@ public class OneTodoFragment extends BaseTodoFragment {
         binding.setTabNumber(ONE);
         tabNumber = ONE;
         initEditTextAttr();
-        initData();
+        initData(ONE);
         initRecyclerAdapter(ONE);
-        initListener();
+        initListener(ONE);
         return binding.getRoot();
     }
 }

@@ -55,7 +55,7 @@ public class NotificationService extends IntentService {
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public static void broadcastNotificationIntent(String title, String description, int icon, Calendar calendar, long notificationId, int tabNumber) {
+    public static void broadcastNotificationIntent(String title, String description, int icon, long awakeTime, long notificationId, int tabNumber) {
         AlarmManager alarmMgr = (AlarmManager) Contextor.getInstance().getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Contextor.getInstance().getContext(), BootBroadcastReceiver.class);
         intent.setType(NotificationService.ACTION_SET_NOTIFICATION);
@@ -66,12 +66,7 @@ public class NotificationService extends IntentService {
         intent.putExtra(NotificationService.EXTRA_TAB_NUMBER, tabNumber);
         intent.putExtra(NotificationService.EXTRA_NOTI_ID, (int)notificationId);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(Contextor.getInstance().getContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, awakeTime, alarmIntent);
         Logger.i(NotificationService.class, "broadcastNotificationIntent_66: " + title + "/" + description);
-    }
-
-    public static void cancelBroadcastNotification(PendingIntent pendingIntent){
-        AlarmManager alarmMgr = (AlarmManager) Contextor.getInstance().getContext().getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.cancel(pendingIntent);
     }
 }

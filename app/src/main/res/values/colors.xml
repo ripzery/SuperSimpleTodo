@@ -7,4 +7,5 @@
     <color name="colorRed">#E53935</color>
     <color name="colorRipple">#cacaca</color>
     <color name="colorTextPrimary">#fff</color>
+    <color name="colorTextSecondary">#42FFFFFF</color>
 </resources>

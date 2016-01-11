@@ -19,7 +19,6 @@
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/layout_input_margin"
-        app:visibility="@{checkedCount.get}"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 

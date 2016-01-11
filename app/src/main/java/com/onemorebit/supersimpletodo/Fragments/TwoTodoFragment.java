@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,61 +29,6 @@ public class TwoTodoFragment extends BaseTodoFragment {
         return fragment;
     }
 
-    /* initilized to do items from share preference */
-    private void initData() {
-        todoItems = (ArrayList<Item>) SharePrefUtil.get(TWO);
-    }
-
-    private void initListener() {
-
-        /* handle whenever checked event is happen */
-        adapter.setTodoInteractionListener(new TodoInteractionListener() {
-            @Override public void onCheckedChangeListener(boolean isChecked, TextView tvChecked) {
-                SharePrefUtil.update(TWO, todoItems);
-                updateCheckedCount(todoItems);
-                if (isChecked) {
-                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    tvChecked.setPaintFlags(tvChecked.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                }
-            }
-        });
-
-        /* handle when delete item is clicked  */
-        binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-
-            @Override public void onClick(View v) {
-                final HashMap<Integer, Item> removedItem = removeItemChecked();
-                Snackbar.make(binding.coordinateLayout, R.string.snack_remove_todo, Snackbar.LENGTH_SHORT)
-                    .setAction(getString(R.string.undo), new View.OnClickListener() {
-                        @Override public void onClick(View v) {
-                            onUndoItem(removedItem);
-                            SharePrefUtil.update(TWO, todoItems);
-                        }
-                    })
-                    .show();
-                SharePrefUtil.update(TWO, todoItems);
-            }
-        });
-
-        /* handle when press added */
-        binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), TWO);
-            }
-        });
-
-        /* handle when press done in the keyboard*/
-        binding.layoutEnterNewItem.etEnterDesc.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addCommand(v.getText().toString(), TWO);
-                }
-                return true;
-            }
-        });
-    }
-
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -94,9 +40,9 @@ public class TwoTodoFragment extends BaseTodoFragment {
         binding.setTabNumber(TWO);
         tabNumber = TWO;
         initEditTextAttr();
-        initData();
+        initData(TWO);
         initRecyclerAdapter(TWO);
-        initListener();
+        initListener(TWO);
         return binding.getRoot();
     }
 }

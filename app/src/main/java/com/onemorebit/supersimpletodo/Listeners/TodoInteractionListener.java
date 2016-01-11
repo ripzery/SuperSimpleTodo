@@ -10,5 +10,6 @@ import com.onemorebit.supersimpletodo.Models.Item;
  * Created by Euro on 1/2/16 AD.
  */
 public interface TodoInteractionListener {
-    void onCheckedChangeListener(boolean isChecked, TextView tvChecked);
+    void onCheckedChange(boolean isChecked, TextView tvChecked);
+    void onItemLongClick(int index, Item item);
 }

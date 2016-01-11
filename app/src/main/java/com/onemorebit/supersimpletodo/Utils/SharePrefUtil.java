@@ -13,6 +13,7 @@ import java.util.List;
  * Created by Euro on 1/2/16 AD.
  */
 public class SharePrefUtil {
+
     public static List<Item> get(int tabNumber) {
         ArrayList<Item> todoItems;
 
@@ -52,7 +53,7 @@ public class SharePrefUtil {
         }
     }
 
-    private static String getKeySharePrefByTabNumber(int tabNumber) {
+    public static String getKeySharePrefByTabNumber(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
                 return Contextor.getInstance().getContext().getString(R.string.share_pref_key_one_list);

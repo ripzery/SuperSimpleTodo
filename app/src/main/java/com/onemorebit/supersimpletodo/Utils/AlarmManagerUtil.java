@@ -13,7 +13,8 @@ import com.onemorebit.supersimpletodo.Services.NotificationService;
  * Created by Euro on 1/6/16 AD.
  */
 public class AlarmManagerUtil {
-    public static void cancelReminder(int notificationId){
+
+    public static void cancelReminder(long notificationId){
         AlarmManager alarmManager = (AlarmManager) Contextor.getInstance().getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(Contextor.getInstance().getContext(), BootBroadcastReceiver.class);
         intent.setType(NotificationService.ACTION_SET_NOTIFICATION);

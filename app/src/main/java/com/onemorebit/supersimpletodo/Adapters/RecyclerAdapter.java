@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.Interfaces.ItemAdapterInterface;
 import com.onemorebit.supersimpletodo.Listeners.TodoInteractionListener;
@@ -108,6 +109,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
                     binding.cbItemChecked.setChecked(!binding.cbItemChecked.isChecked());
                 }
             });
+
+            /* set onlongclick in rootLayout to edit task */
+            binding.rippleItem.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override public boolean onLongClick(View v) {
+                    onLongClickItem(getAdapterPosition(), listItems.get(getAdapterPosition()));
+                    return true;
+                }
+            });
         }
 
         /**
@@ -122,11 +131,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
                 if (todoInteractionListener != null) {
                     /*  */
                     listItems.get(getAdapterPosition()).setChecked(isChecked);
-                    todoInteractionListener.onCheckedChangeListener(isChecked, binding.tvItemDesc);
+                    todoInteractionListener.onCheckedChange(isChecked, binding.tvItemDesc);
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
                 Logger.i(ItemViewHolder.class, "onCheckedChanged_87: ");
                 e.printStackTrace();
+            }
+        }
+
+        private void onLongClickItem(int index, Item item){
+            /* if bind listener */
+            if (todoInteractionListener != null) {
+                todoInteractionListener.onItemLongClick(index, item);
             }
         }
 
