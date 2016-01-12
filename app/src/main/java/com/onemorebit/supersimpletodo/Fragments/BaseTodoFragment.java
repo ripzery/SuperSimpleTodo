@@ -10,12 +10,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
@@ -35,6 +40,7 @@ import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Command;
 import com.onemorebit.supersimpletodo.Utils.DialogBuilder;
 import com.onemorebit.supersimpletodo.Utils.Logger;
+import com.onemorebit.supersimpletodo.Utils.MyAutoCompleteTokenizer;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.LayoutDialogEditBinding;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
@@ -146,7 +152,18 @@ public class BaseTodoFragment extends Fragment {
     protected void initEditTextAttr() {
         binding.layoutEnterNewItem.etEnterDesc.setMaxLines(3);
         binding.layoutEnterNewItem.etEnterDesc.setHorizontallyScrolling(false);
+
+        /* add ability of auto complete */
+        String[] COMMANDS = new String[]{"remind"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, COMMANDS);
+        binding.layoutEnterNewItem.etEnterDesc.setAdapter(adapter);
+        binding.layoutEnterNewItem.etEnterDesc.setThreshold(1); //Set number of characters before the dropdown should be shown
+
+        //Create a new Tokenizer which will get text after '.' and terminate on ' '
+        binding.layoutEnterNewItem.etEnterDesc.setTokenizer(new MyAutoCompleteTokenizer());
     }
+
 
     protected void initListener(final int tabNumber) {
 

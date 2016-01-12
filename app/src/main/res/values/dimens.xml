@@ -6,6 +6,9 @@
     <dimen name="item_margin">16dp</dimen>
     <dimen name="layout_input_margin">16dp</dimen>
     <dimen name="text_item_desc">18sp</dimen>
+    <dimen name="x">8dp</dimen>
+    <dimen name="xx">16dp</dimen>
+    <dimen name="xxx">24dp</dimen>
     <dimen name="btn_delete_height">56dp</dimen>
     <dimen name="cursor_width">3dp</dimen>
     <dimen name="tab_title_text">14sp</dimen>

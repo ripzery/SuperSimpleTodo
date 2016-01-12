@@ -39,7 +39,7 @@
     <style name="EnterTodoEditText.MaterialEditText">
         <item name="met_textColor">@color/colorPrimary</item>
         <item name="met_textColorHint">@color/colorTextSecondary</item>
-        <item name="met_floatingLabel">highlight</item>
+        <item name="met_floatingLabel">none</item>
         <item name="met_floatingLabelAnimating">true</item>
         <item name="met_hideUnderline">true</item>
         <item name="met_floatingLabelTextColor">@color/colorAccent</item>

@@ -20,13 +20,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
+        android:background="@drawable/layout_enter_item"
         android:layout_marginLeft="@dimen/layout_input_margin"
         android:layout_marginRight="@dimen/layout_input_margin"
+        android:layout_marginBottom="@dimen/layout_input_margin"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView
             android:id="@+id/etEnterDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

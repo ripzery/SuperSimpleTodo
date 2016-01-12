@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         mainBinder.pager.setCurrentItem(0);
     }
 
+
+
     @Subscribe public void onCheckedUpdate(OttoCheckedCount ottoCheckedCount) {
         String todoCount = ottoCheckedCount.count == 0 ? "<b>All done</b>" : "<b>" + ottoCheckedCount.count + "</b> items";
         tabColumnBindings.get(ottoCheckedCount.tabNumber).setTabTodoCount(todoCount);
