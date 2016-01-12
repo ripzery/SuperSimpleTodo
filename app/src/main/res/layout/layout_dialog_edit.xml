@@ -27,23 +27,9 @@
             android:id="@+id/etEnterDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:fontFamily="sans-serif-light"
-            android:imeOptions="actionDone"
-            app:met_textColor="@color/colorTextPrimary"
-            app:met_textColorHint="@color/colorTextSecondary"
-            app:met_minCharacters="1"
-            app:met_maxCharacters="100"
-            app:met_floatingLabel="highlight"
-            app:met_floatingLabelAnimating="true"
-            app:met_floatingLabelTextColor="@color/colorAccent"
-            app:met_helperText="Task description must not empty"
-            app:met_primaryColor="@color/colorAccent"
-            app:met_baseColor="@color/colorAccent"
-            app:met_clearButton="true"
             android:layout_marginTop="16dp"
             android:text="@{item.getTrimHtmlTime}"
-            android:hint="@string/et_enter_item_hint"/>
+            style="@style/EnterTodoEditText.MaterialEditText"/>
 
 
         <!-- Layout show has reminder -->

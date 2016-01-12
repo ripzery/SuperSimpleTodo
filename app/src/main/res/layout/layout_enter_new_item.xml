@@ -4,12 +4,14 @@
     tools:context=".MainActivity">
 
     <data>
+
         <variable
             name="tabNumber"
-            type="int" />
+            type="int"/>
+
         <variable
             name="checkedCount"
-            type="android.databinding.ObservableInt" />
+            type="android.databinding.ObservableInt"/>
     </data>
 
     <LinearLayout
@@ -18,32 +20,32 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:layout_margin="@dimen/layout_input_margin"
+        android:layout_marginLeft="@dimen/layout_input_margin"
+        android:layout_marginRight="@dimen/layout_input_margin"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
-        <EditText
+
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/etEnterDesc"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
             android:textSize="18sp"
-            android:fontFamily="sans-serif-light"
-            app:editTextLine="@{tabNumber}"
-            android:textCursorDrawable="@null"
             android:textColor="@{tabNumber}"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:hint="@string/et_enter_item_hint"/>
+            style="@style/EnterTodoEditText.MaterialEditText"/>
 
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="60dp"
+        <ImageButton
+            android:id="@+id/ibAdd"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_add"
-            android:visibility="gone"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@{tabNumber}"/>
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/image_button_description_send"
+            app:src="@{tabNumber}"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
 
     </LinearLayout>
 

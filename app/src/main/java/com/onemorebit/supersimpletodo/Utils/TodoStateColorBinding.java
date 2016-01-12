@@ -9,6 +9,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -41,6 +42,12 @@ public class TodoStateColorBinding {
         editText.setBackground(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getDrawableEditText(tabNumber)));
     }
 
+    @BindingAdapter({ "app:src" }) public static void setImageButtonSendDrawable(ImageButton imageButton, int tabNumber) {
+        //editText.getBackground()
+        //    .setColorFilter(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)), PorterDuff.Mode.SRC_ATOP);
+        imageButton.setImageDrawable(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getImageButtonSend(tabNumber)));
+    }
+
     @BindingAdapter({ "app:mrl_rippleColor" }) public static void setRippleColor(MaterialRippleLayout materialRippleLayout, int tabNumber) {
         materialRippleLayout.setRippleColor(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)));
     }
@@ -50,19 +57,18 @@ public class TodoStateColorBinding {
         final boolean isShouldAnimate = (isNotAnimateRepeat) && (btnDeleteAnimation == null || !(btnDeleteAnimation.isRunning() && checkCount > 0));
         if (isShouldAnimate) {
 
-            if(view instanceof Button) {
+            if (view instanceof Button) {
                 btnDeleteAnimation = YoYo.with(checkCount > 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
-            }else{
+            } else {
                 YoYo.with(checkCount == 0 ? Techniques.Landing : Techniques.TakingOff).duration(300).playOn(view);
             }
-
         }
     }
 
-    @BindingAdapter({"app:visibility"}) public static void setVisibility(View view, int checkedCount){
-        if(view instanceof Button){
+    @BindingAdapter({ "app:visibility" }) public static void setVisibility(View view, int checkedCount) {
+        if (view instanceof Button) {
             view.setVisibility(checkedCount == 0 ? View.GONE : View.VISIBLE);
-        }else{
+        } else {
             view.setVisibility(checkedCount > 0 ? View.GONE : View.VISIBLE);
         }
     }
@@ -75,8 +81,7 @@ public class TodoStateColorBinding {
         textView.setTextColor(getTabTextColor(tabNumber));
     }
 
-    @BindingAdapter({ "app:htmlText"})
-    public static void setHtmlText(TextView textView, String htmlText){
+    @BindingAdapter({ "app:htmlText" }) public static void setHtmlText(TextView textView, String htmlText) {
         textView.setText(Html.fromHtml(htmlText));
     }
 
@@ -121,6 +126,17 @@ public class TodoStateColorBinding {
                 return R.drawable.btn_ripple_delete;
             default:
                 return R.drawable.btn_ripple_move;
+        }
+    }
+
+    private static int getImageButtonSend(int tabNumber) {
+        switch (tabNumber) {
+            case BaseTodoFragment.ONE:
+                return R.mipmap.ic_content_send_blue;
+            case BaseTodoFragment.TWO:
+                return R.mipmap.ic_content_send_red;
+            default:
+                return R.mipmap.ic_content_send_blue;
         }
     }
 }

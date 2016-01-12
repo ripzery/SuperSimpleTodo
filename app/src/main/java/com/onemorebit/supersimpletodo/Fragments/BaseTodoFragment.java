@@ -189,7 +189,7 @@ public class BaseTodoFragment extends Fragment {
         });
 
         /* handle when press added */
-        binding.layoutEnterNewItem.btnAdd.setOnClickListener(new View.OnClickListener() {
+        binding.layoutEnterNewItem.ibAdd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 addCommand(binding.layoutEnterNewItem.etEnterDesc.getText().toString(), tabNumber);
             }
@@ -384,6 +384,7 @@ public class BaseTodoFragment extends Fragment {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 if (inflate.tvTime.getText().toString().equals("Not set")) {
+
                     /* cancel notification */
                     AlarmManagerUtil.cancelReminder(item.getNotificationId());
 
@@ -392,6 +393,7 @@ public class BaseTodoFragment extends Fragment {
 
                     /* reset notification */
                     item.setNotificationId(0);
+
                 } else if (item.getDateString().equals(inflate.tvTime.getText().toString())) {
                     /* if date time is not changed */
 

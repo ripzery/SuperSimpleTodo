@@ -15,7 +15,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="EditText" parent="Theme.AppCompat.NoActionBar">
+    <style name="CustomEditText">
         <item name="colorControlNormal">#c5c5c5</item>
         <item name="colorControlActivated">@color/colorRed</item>
         <item name="colorControlHighlight">@color/colorRed</item>
@@ -27,6 +27,24 @@
 
     <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="EnterTodoEditText">
+        <item name="android:inputType">text</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:hint">@string/et_enter_item_hint</item>
+    </style>
+
+    <style name="EnterTodoEditText.MaterialEditText">
+        <item name="met_textColor">@color/colorPrimary</item>
+        <item name="met_textColorHint">@color/colorTextSecondary</item>
+        <item name="met_floatingLabel">highlight</item>
+        <item name="met_floatingLabelAnimating">true</item>
+        <item name="met_hideUnderline">true</item>
+        <item name="met_floatingLabelTextColor">@color/colorAccent</item>
+        <item name="met_primaryColor">@color/colorAccent</item>
+        <item name="met_baseColor">@color/colorAccent</item>
     </style>
 
 
