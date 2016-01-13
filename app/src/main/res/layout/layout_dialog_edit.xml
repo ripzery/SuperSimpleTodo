@@ -34,6 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@{item.getTrimHtmlTime}"
+            app:met_minCharacters="1"
+            app:met_maxCharacters="100"
+            app:met_autoValidate="true"
+            app:met_floatingLabel="highlight"
             android:textColor="@{tabNumber}"
             style="@style/EnterTodoEditText.MaterialEditText"/>
 

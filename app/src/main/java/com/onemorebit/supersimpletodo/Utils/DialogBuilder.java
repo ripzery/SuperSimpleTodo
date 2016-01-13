@@ -22,7 +22,7 @@ public class DialogBuilder {
             .positiveText("Set")
             .negativeText("Cancel")
             .positiveColor(ContextCompat.getColor(Contextor.getInstance().getContext(), tabNumber == BaseTodoFragment.ONE ? R.color.colorAccent : R.color.colorRed))
-            .negativeColor(ContextCompat.getColor(Contextor.getInstance().getContext(), R.color.colorTextSecondary))
+            .negativeColor(ContextCompat.getColor(Contextor.getInstance().getContext(), R.color.colorTextPrimary))
             .onNegative(cancelCb)
             .onPositive(submitCb)
             .build();

@@ -10,9 +10,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -340,6 +342,7 @@ public class BaseTodoFragment extends Fragment {
         /* Initialize EditText */
         inflate.etEnterDesc.setHorizontallyScrolling(false);
         inflate.etEnterDesc.setMaxLines(3);
+        inflate.etEnterDesc.setError(getString(R.string.snack_bar_et_warn_empty));
 
         /* Databinding : setIsNotify to set visibility of ivClose and alpha */
         inflate.setIsNotify(item.getNotificationId() != 0);
@@ -349,7 +352,6 @@ public class BaseTodoFragment extends Fragment {
 
         /* Databinding : setTabNumber to change description text color by tab number */
         inflate.setTabNumber(tabNumber);
-
 
         /* set listener when click textview time */
         inflate.tvTime.setOnClickListener(new View.OnClickListener() {
@@ -402,11 +404,6 @@ public class BaseTodoFragment extends Fragment {
 
         final MaterialDialog.SingleButtonCallback submitCallback = new MaterialDialog.SingleButtonCallback() {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                if(inflate.etEnterDesc.getText().toString().isEmpty()){
-                    Toast.makeText(BaseTodoFragment.this.getContext(), getString(R.string.snack_bar_et_warn_empty), Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
                 if (inflate.tvTime.getText().toString().equals("Not set")) {
 
@@ -464,6 +461,27 @@ public class BaseTodoFragment extends Fragment {
 
         final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(),tabNumber,  cancelCallback,
             submitCallback);
+
+
+        /* Add text watcher to check if description is not empty */
+        inflate.etEnterDesc.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+                // Enable positive button if description isn't empty
+                editDialog.getActionButton(DialogAction.POSITIVE).setEnabled(s.length() > 0);
+
+                /* show hide error text */
+                inflate.etEnterDesc.setError(s.length() == 0 ? getString(R.string.snack_bar_et_warn_empty) : "");
+            }
+        });
+
 
         editDialog.setOnShowListener(showListener);
 
