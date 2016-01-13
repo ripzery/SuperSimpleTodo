@@ -347,6 +347,9 @@ public class BaseTodoFragment extends Fragment {
         /* Databinding : setItem to set description and time text*/
         inflate.setItem(item);
 
+        /* Databinding : setTabNumber to change description text color by tab number */
+        inflate.setTabNumber(tabNumber);
+
 
         /* set listener when click textview time */
         inflate.tvTime.setOnClickListener(new View.OnClickListener() {
@@ -399,6 +402,11 @@ public class BaseTodoFragment extends Fragment {
 
         final MaterialDialog.SingleButtonCallback submitCallback = new MaterialDialog.SingleButtonCallback() {
             @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                if(inflate.etEnterDesc.getText().toString().isEmpty()){
+                    Toast.makeText(BaseTodoFragment.this.getContext(), getString(R.string.snack_bar_et_warn_empty), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (inflate.tvTime.getText().toString().equals("Not set")) {
 
@@ -454,10 +462,11 @@ public class BaseTodoFragment extends Fragment {
             }
         };
 
-        final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(), cancelCallback,
+        final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(),tabNumber,  cancelCallback,
             submitCallback);
 
         editDialog.setOnShowListener(showListener);
+
 
         return editDialog;
     }

@@ -8,6 +8,11 @@
         <import type="android.view.View"/>
 
         <variable
+            name="tabNumber"
+            type="int"/>
+
+
+        <variable
             name="isNotify"
             type="boolean"/>
 
@@ -29,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@{item.getTrimHtmlTime}"
+            android:textColor="@{tabNumber}"
             style="@style/EnterTodoEditText.MaterialEditText"/>
 
 
@@ -44,7 +50,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_social_notifications_blue"/>
+                app:src="@{tabNumber}"/>
 
             <TextView
                 android:id="@+id/tvTime"

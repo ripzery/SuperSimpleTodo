@@ -42,10 +42,12 @@ public class TodoStateColorBinding {
         editText.setBackground(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getDrawableEditText(tabNumber)));
     }
 
-    @BindingAdapter({ "app:src" }) public static void setImageButtonSendDrawable(ImageButton imageButton, int tabNumber) {
-        //editText.getBackground()
-        //    .setColorFilter(ContextCompat.getColor(Contextor.getInstance().getContext(), getColorView(tabNumber)), PorterDuff.Mode.SRC_ATOP);
-        imageButton.setImageDrawable(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getImageButtonSend(tabNumber)));
+    @BindingAdapter({ "app:src" }) public static void setImageDrawable(ImageView view, int tabNumber) {
+        if(view instanceof ImageButton){
+            view.setImageDrawable(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getImageButtonSend(tabNumber)));
+        }else if(view != null){
+            view.setImageDrawable(ContextCompat.getDrawable(Contextor.getInstance().getContext(), getImageNoti(tabNumber)));
+        }
     }
 
     @BindingAdapter({ "app:mrl_rippleColor" }) public static void setRippleColor(MaterialRippleLayout materialRippleLayout, int tabNumber) {
@@ -137,6 +139,17 @@ public class TodoStateColorBinding {
                 return R.mipmap.ic_content_send_red;
             default:
                 return R.mipmap.ic_content_send_blue;
+        }
+    }
+
+    private static int getImageNoti(int tabNumber) {
+        switch (tabNumber) {
+            case BaseTodoFragment.ONE:
+                return R.mipmap.ic_social_notifications_blue;
+            case BaseTodoFragment.TWO:
+                return R.mipmap.ic_social_notifications_red;
+            default:
+                return R.mipmap.ic_social_notifications_blue;
         }
     }
 }
