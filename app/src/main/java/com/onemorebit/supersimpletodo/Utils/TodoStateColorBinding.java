@@ -87,23 +87,27 @@ public class TodoStateColorBinding {
         textView.setText(Html.fromHtml(htmlText));
     }
 
+    @BindingAdapter({ "android:textCursorDrawable" }) public static void setTextCursorDrawable(EditText editText, String htmlText) {
+    }
+
+
     public static int getColorView(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
-                return R.color.colorAccent;
+                return R.color.colorBlue;
             case BaseTodoFragment.TWO:
                 return R.color.colorRed;
             default:
-                return R.color.colorAccent;
+                return R.color.colorBlue;
         }
     }
 
     private static ColorStateList getTabTextColor(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
-                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
-            case BaseTodoFragment.TWO:
                 return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_red);
+            case BaseTodoFragment.TWO:
+                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
             default:
                 return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
         }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuickDo</string>
+    <string name="app_name">Will Do</string>
     <string name="mockup_todo_item_desc">Buy some milk in 7-Eleven</string>
     <string name="et_enter_item_hint">Enter task description</string>
     <string name="btn_add">Add</string>

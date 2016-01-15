@@ -27,16 +27,20 @@
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
-
-        <com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView
+        <MultiAutoCompleteTextView
             android:id="@+id/etEnterDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textCursorDrawable="@null"
+            android:fontFamily="sans-serif-light"
+            android:background="@android:color/transparent"
+            android:hint="@string/et_enter_item_hint"
             android:textSize="18sp"
-            android:textColor="@{tabNumber}"
-            style="@style/EnterTodoEditText.MaterialEditText"/>
+            android:textColor="@{tabNumber}"/>
 
         <ImageButton
             android:id="@+id/ibAdd"

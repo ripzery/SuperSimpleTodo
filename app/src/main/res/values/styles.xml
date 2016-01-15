@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorBlue</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -42,9 +42,9 @@
         <item name="met_floatingLabel">none</item>
         <item name="met_floatingLabelAnimating">true</item>
         <item name="met_hideUnderline">true</item>
-        <item name="met_floatingLabelTextColor">@color/colorAccent</item>
-        <item name="met_primaryColor">@color/colorAccent</item>
-        <item name="met_baseColor">@color/colorAccent</item>
+        <item name="met_floatingLabelTextColor">@color/colorBlue</item>
+        <item name="met_primaryColor">@color/colorBlue</item>
+        <item name="met_baseColor">@color/colorBlue</item>
     </style>
 
 

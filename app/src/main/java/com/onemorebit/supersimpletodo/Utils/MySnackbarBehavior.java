@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.LinearLayout;
 
 /**
  * Created by Euro on 1/4/16 AD.
@@ -28,4 +29,6 @@ public class MySnackbarBehavior extends CoordinatorLayout.Behavior<View>  {
         // only when the changes is from a snackbar
         return dependency instanceof Snackbar.SnackbarLayout;
     }
+
+
 }

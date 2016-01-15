@@ -86,6 +86,11 @@ public class Item extends BaseObservable {
     }
 
     public boolean isShouldNotify() {
-        return new Date().compareTo(getDateFromString()) <= 0;
+        try{
+            return new Date().compareTo(getDateFromString()) <= 0;
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

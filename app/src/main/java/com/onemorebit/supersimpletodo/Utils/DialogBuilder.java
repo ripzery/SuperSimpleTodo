@@ -1,11 +1,8 @@
 package com.onemorebit.supersimpletodo.Utils;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.R;
@@ -21,7 +18,7 @@ public class DialogBuilder {
             .cancelable(true)
             .positiveText("Set")
             .negativeText("Cancel")
-            .positiveColor(ContextCompat.getColor(Contextor.getInstance().getContext(), tabNumber == BaseTodoFragment.ONE ? R.color.colorAccent : R.color.colorRed))
+            .positiveColor(ContextCompat.getColor(Contextor.getInstance().getContext(), tabNumber == BaseTodoFragment.ONE ? R.color.colorBlue : R.color.colorRed))
             .negativeColor(ContextCompat.getColor(Contextor.getInstance().getContext(), R.color.colorTextPrimary))
             .onNegative(cancelCb)
             .onPositive(submitCb)

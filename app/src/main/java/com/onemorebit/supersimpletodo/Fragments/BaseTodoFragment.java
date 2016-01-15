@@ -65,6 +65,7 @@ public class BaseTodoFragment extends Fragment {
     protected ObservableInt checkedCount = new ObservableInt(0);
     private PagerAdapter pagerAdapter;
     private MenuItem removeMenu;
+    private MenuItem numberItemsMenu;
 
     protected void action(final String option, final String description, final int tabNumber) {
         switch (option) {
@@ -492,6 +493,8 @@ public class BaseTodoFragment extends Fragment {
     private void updateRemoveMenuView(int count) {
         try {
             removeMenu.setVisible(count > 0);
+            numberItemsMenu.setVisible(count > 0);
+            numberItemsMenu.setTitle(count + " selected");
         } catch (NullPointerException e) {
             Logger.i(BaseTodoFragment.class, "removeMenu has not been initialized yet");
         }
@@ -519,6 +522,7 @@ public class BaseTodoFragment extends Fragment {
 
     @Override public void onPrepareOptionsMenu(Menu menu) {
         removeMenu = menu.findItem(R.id.remove);
+        numberItemsMenu = menu.findItem(R.id.numberItems);
 
         removeMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override public boolean onMenuItemClick(MenuItem item) {

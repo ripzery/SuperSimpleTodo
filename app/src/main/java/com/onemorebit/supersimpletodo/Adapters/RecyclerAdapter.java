@@ -1,6 +1,7 @@
 package com.onemorebit.supersimpletodo.Adapters;
 
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,20 +64,33 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     @Override public void removeItem(int index) {
         listItems.remove(index);
         notifyItemRemoved(index);
+        if(Build.VERSION.SDK_INT >= 19) {
+            notifyItemRemoved(index);
+        }else{
+            notifyDataSetChanged();
+        }
     }
 
     /* add item at the last position */
     @Override public void addItem(Item item) {
         int position = listItems.size();
         listItems.add(position, item);
-        notifyItemInserted(position);
+        if(Build.VERSION.SDK_INT >= 19) {
+            notifyItemInserted(position);
+        }else{
+            notifyDataSetChanged();
+        }
     }
 
     /* insert item in a position */
     public void insertItem(int position, Item item) {
         Logger.i(RecyclerAdapter.class, "insertItem_68: " + position);
         listItems.add(position, item);
-        notifyItemInserted(position);
+        if(Build.VERSION.SDK_INT >= 19) {
+            notifyItemInserted(position);
+        }else{
+            notifyDataSetChanged();
+        }
     }
 
     /* Bind listener to recycler adapter */

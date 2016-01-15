@@ -7,8 +7,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
+import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
 import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Contextor;
@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     public MainBinder mainBinder;
     public PagerAdapter adapter;
-    public MenuItem removeItem;
     private ArrayList<LayoutTabColumnBinding> tabColumnBindings = new ArrayList<>();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
             Contextor.getInstance().init(this);
         }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         initDataBinding();
         initInstance();
@@ -49,14 +50,27 @@ public class MainActivity extends AppCompatActivity {
     private void initDataBinding() {
         mainBinder = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mainBinder.layoutToolbar.toolbar);
-        mainBinder.layoutToolbar.toolbar.setTitle(getString(R.string.app_name));
+
+        /* set toolbar title */
+        mainBinder.layoutToolbar.toolbar.setTitle(getString(R.string.app_name) + " - To do list");
     }
 
     private void initInstance() {
+
+        /* init instance adapter */
         adapter = new PagerAdapter(getSupportFragmentManager(), this);
+
+        /* set view pager adapter */
         mainBinder.pager.setAdapter(adapter);
+
+        /* bind view pager with tab layout */
         mainBinder.layoutTab.tabLayout.setupWithViewPager(mainBinder.pager);
 
+        /* init tab indicator color */
+        mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.colorRed));
+
+
+        /* set all tab's custom view */
         for (int i = 0; i < mainBinder.layoutTab.tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = mainBinder.layoutTab.tabLayout.getTabAt(i);
             final LayoutTabColumnBinding tabView = adapter.getTabView(i);
@@ -64,11 +78,14 @@ public class MainActivity extends AppCompatActivity {
             tab.setCustomView(tabView.getRoot());
         }
 
+        /* add page change listener */
         mainBinder.pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mainBinder.layoutTab.tabLayout));
+
+        /* add tab selected listener */
         mainBinder.layoutTab.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(
-                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == 0 ? R.color.colorAccent : R.color.colorRed));
+                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == BaseTodoFragment.ONE ? R.color.colorRed : R.color.colorBlue));
                 mainBinder.pager.setCurrentItem(tab.getPosition());
             }
 
@@ -80,10 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mainBinder.pager.setCurrentItem(0);
+
+        /* Initial selected color state */
+        mainBinder.layoutTab.tabLayout.getTabAt(0).getCustomView().setSelected(true);
+
+        /* selected first tab*/
+        mainBinder.pager.setCurrentItem(BaseTodoFragment.ONE);
     }
-
-
 
     @Subscribe public void onCheckedUpdate(OttoCheckedCount ottoCheckedCount) {
         String todoCount = ottoCheckedCount.count == 0 ? "<b>All done</b>" : "<b>" + ottoCheckedCount.count + "</b> items";

@@ -1,6 +1,8 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
 
     <data class="TodoBinding">
 
@@ -16,40 +18,14 @@
 
         <variable
             name="isEmpty"
-            type="boolean" />
+            type="boolean"/>
     </data>
 
     <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:showIn="@layout/activity_main"
-        tools:context=".Fragments.BaseTodoFragment">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="@dimen/root_view_padding"
-                tools:listitem="@layout/layout_item">
-
-            </android.support.v7.widget.RecyclerView>
-
-            <include
-                android:id="@+id/layoutEmpty"
-                bind:isEmpty="@{isEmpty}"
-                layout="@layout/layout_empty_item" />
-
-        </LinearLayout>
-
+        tools:showIn="@layout/activity_main">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/coordinateLayout"
@@ -57,17 +33,46 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/layoutInput"
-                android:orientation="vertical"
-                app:layout_behavior="com.onemorebit.supersimpletodo.Utils.MySnackbarBehavior"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="com.onemorebit.supersimpletodo.Utils.MySnackbarBehavior">
 
-                <View
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                <!--<Button-->
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/root_view_padding"
+                        tools:listitem="@layout/layout_item">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <include
+                        android:id="@+id/layoutEmpty"
+                        bind:isEmpty="@{isEmpty}"
+                        layout="@layout/layout_empty_item"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/layoutInput"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="48dp" />-->
+
+                    <!--<Button-->
                     <!--android:id="@+id/btnDelete"-->
                     <!--style="@style/DeleteButton"-->
                     <!--android:background="@{tabNumber}"-->
@@ -78,24 +83,25 @@
                     <!--android:enabled="@{checkedCount.get > 0 ? true : false}"-->
                     <!--android:textColor="@{tabNumber}"/>-->
 
-                <Button
-                    android:id="@+id/btnDelete"
-                    style="@style/DeleteButton"
-                    android:visibility="gone"
-                    android:textColor="@{tabNumber}"/>
+                    <Button
+                        android:id="@+id/btnDelete"
+                        style="@style/DeleteButton"
+                        android:visibility="gone"
+                        android:textColor="@{tabNumber}"/>
 
-                <include
-                    layout="@layout/layout_enter_new_item"
-                    bind:tabNumber="@{tabNumber}"
-                    bind:checkedCount="@{checkedCount}"
-                    android:id="@+id/layoutEnterNewItem"/>
+                    <include
+                        layout="@layout/layout_enter_new_item"
+                        bind:tabNumber="@{tabNumber}"
+                        bind:checkedCount="@{checkedCount}"
+                        android:id="@+id/layoutEnterNewItem"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
-
 
 </layout>
 
