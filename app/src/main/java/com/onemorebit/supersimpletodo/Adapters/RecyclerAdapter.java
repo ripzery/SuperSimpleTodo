@@ -63,7 +63,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     /* remove item at index */
     @Override public void removeItem(int index) {
         listItems.remove(index);
-        notifyItemRemoved(index);
         if(Build.VERSION.SDK_INT >= 19) {
             notifyItemRemoved(index);
         }else{

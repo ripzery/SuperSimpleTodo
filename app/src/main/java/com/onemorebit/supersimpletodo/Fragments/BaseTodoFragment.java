@@ -43,6 +43,7 @@ import com.onemorebit.supersimpletodo.Utils.Command;
 import com.onemorebit.supersimpletodo.Utils.DialogBuilder;
 import com.onemorebit.supersimpletodo.Utils.Logger;
 import com.onemorebit.supersimpletodo.Utils.MyAutoCompleteTokenizer;
+import com.onemorebit.supersimpletodo.Utils.MyLinearLayoutManager;
 import com.onemorebit.supersimpletodo.Utils.SharePrefUtil;
 import com.onemorebit.supersimpletodo.databinding.LayoutDialogEditBinding;
 import com.onemorebit.supersimpletodo.databinding.TodoBinding;
@@ -141,6 +142,8 @@ public class BaseTodoFragment extends Fragment {
     }
 
     protected void handleEmptyState() {
+        Logger.d(BaseTodoFragment.class, "handleEmptyState_144: " + todoItems.isEmpty());
+
         binding.setIsEmpty(todoItems.isEmpty());
     }
 
@@ -166,7 +169,6 @@ public class BaseTodoFragment extends Fragment {
         //Create a new Tokenizer which will get text after '.' and terminate on ' '
         binding.layoutEnterNewItem.etEnterDesc.setTokenizer(new MyAutoCompleteTokenizer());
     }
-
 
     protected void initListener(final int tabNumber) {
 
@@ -228,10 +230,10 @@ public class BaseTodoFragment extends Fragment {
 
     protected void initRecyclerAdapter(int tabNumber) {
         /* tell recyclerview that every item has a fix size for better performance */
-        binding.recyclerView.setHasFixedSize(true);
+        //binding.recyclerView.setHasFixedSize(true);
 
         /* set simple vertical linear layout */
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerView.setLayoutManager(new MyLinearLayoutManager(getActivity()));
 
         /* init current items in share preference*/
         adapter = new RecyclerAdapter(todoItems, tabNumber);
@@ -380,6 +382,8 @@ public class BaseTodoFragment extends Fragment {
             @Override public void onClick(View v) {
                 /* Reset notification id */
                 inflate.setItem(new Item(item.isChecked(), item.getTrimHtmlTime(), 0));
+
+                inflate.setIsNotify(false);
             }
         });
 
@@ -460,9 +464,8 @@ public class BaseTodoFragment extends Fragment {
             }
         };
 
-        final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(),tabNumber,  cancelCallback,
+        final MaterialDialog editDialog = DialogBuilder.createEditDialog(BaseTodoFragment.this.getActivity(), inflate.getRoot(), tabNumber, cancelCallback,
             submitCallback);
-
 
         /* Add text watcher to check if description is not empty */
         inflate.etEnterDesc.addTextChangedListener(new TextWatcher() {
@@ -493,8 +496,8 @@ public class BaseTodoFragment extends Fragment {
     private void updateRemoveMenuView(int count) {
         try {
             removeMenu.setVisible(count > 0);
-            numberItemsMenu.setVisible(count > 0);
-            numberItemsMenu.setTitle(count + " selected");
+            //numberItemsMenu.setVisible(count > 0);
+            //numberItemsMenu.setTitle(count + " selected");
         } catch (NullPointerException e) {
             Logger.i(BaseTodoFragment.class, "removeMenu has not been initialized yet");
         }
@@ -522,7 +525,7 @@ public class BaseTodoFragment extends Fragment {
 
     @Override public void onPrepareOptionsMenu(Menu menu) {
         removeMenu = menu.findItem(R.id.remove);
-        numberItemsMenu = menu.findItem(R.id.numberItems);
+        //numberItemsMenu = menu.findItem(R.id.numberItems);
 
         removeMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override public boolean onMenuItemClick(MenuItem item) {

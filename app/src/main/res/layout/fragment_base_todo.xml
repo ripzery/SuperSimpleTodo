@@ -21,56 +21,68 @@
             type="boolean"/>
     </data>
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         tools:showIn="@layout/activity_main">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinateLayout"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            tools:visibility="visible"
+            android:visibility="@{isEmpty ? View.VISIBLE : View.GONE}"
+            android:layout_gravity="center">
 
-            <LinearLayout
+            <include
+                android:id="@+id/layoutEmpty"
+                layout="@layout/layout_empty_item"/>
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="com.onemorebit.supersimpletodo.Utils.MySnackbarBehavior">
+                android:layout_height="0dp"
+                tools:visibility="gone"
+                android:layout_weight="1"
+                android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"
+                android:padding="@dimen/root_view_padding"
+                tools:listitem="@layout/layout_item">
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
+            </android.support.v7.widget.RecyclerView>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="@dimen/root_view_padding"
-                        tools:listitem="@layout/layout_item">
 
-                    </android.support.v7.widget.RecyclerView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="@{isEmpty ? View.VISIBLE : View.GONE}"
+                android:layout_weight="1"/>
 
-                    <include
-                        android:id="@+id/layoutEmpty"
-                        bind:isEmpty="@{isEmpty}"
-                        layout="@layout/layout_empty_item"/>
-
-                </LinearLayout>
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/coordinateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
 
                 <LinearLayout
                     android:id="@+id/layoutInput"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
+                    app:layout_behavior="com.onemorebit.supersimpletodo.Utils.MySnackbarBehavior"
                     android:layout_height="wrap_content">
 
-                    <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="48dp" />-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"/>
 
                     <!--<Button-->
                     <!--android:id="@+id/btnDelete"-->
@@ -97,11 +109,13 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </android.support.design.widget.CoordinatorLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+
+    </FrameLayout>
 
 </layout>
 

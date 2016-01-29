@@ -24,4 +24,5 @@
     <string name="dialog_edit_title">Edit</string>
     <string name="menu_remove">REMOVE</string>
     <string name="image_button_description_send">send</string>
+    <string name="tv_hint_command_remind">Type \".remind\" at the end of description to add reminder</string>
 </resources>

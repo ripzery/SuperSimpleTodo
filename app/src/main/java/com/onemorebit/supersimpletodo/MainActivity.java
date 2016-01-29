@@ -3,14 +3,16 @@ package com.onemorebit.supersimpletodo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.onemorebit.supersimpletodo.Adapters.PagerAdapter;
 import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
+import com.onemorebit.supersimpletodo.Fragments.OneTodoFragment;
 import com.onemorebit.supersimpletodo.Models.OttoCheckedCount;
-import com.onemorebit.supersimpletodo.Utils.BusProvider;
 import com.onemorebit.supersimpletodo.Utils.Contextor;
 import com.onemorebit.supersimpletodo.databinding.LayoutTabColumnBinding;
 import com.onemorebit.supersimpletodo.databinding.MainBinder;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public MainBinder mainBinder;
     public PagerAdapter adapter;
     private ArrayList<LayoutTabColumnBinding> tabColumnBindings = new ArrayList<>();
+    private OneTodoFragment oneFragment;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,30 +32,40 @@ public class MainActivity extends AppCompatActivity {
             Contextor.getInstance().init(this);
         }
 
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         initDataBinding();
-        initInstance();
+
+        /* Init pager adapter */
+        //initInstance();
+
+        adapter = new PagerAdapter(getSupportFragmentManager(), this);
+
+        initFragment();
+    }
+
+    private void initFragment(){
+        oneFragment = new OneTodoFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.rootLayout, oneFragment).commit();
     }
 
     @Override protected void onStop() {
-        BusProvider.getInstance().unregister(this);
+        //BusProvider.getInstance().unregister(this);
         super.onStop();
     }
 
     @Override protected void onStart() {
         super.onStart();
-        BusProvider.getInstance().register(this);
+        //BusProvider.getInstance().register(this);
     }
 
     private void initDataBinding() {
         mainBinder = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mainBinder.layoutToolbar.toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+
         /* set toolbar title */
-        mainBinder.layoutToolbar.toolbar.setTitle(getString(R.string.app_name) + " - To do list");
+        actionBar.setTitle(getString(R.string.app_name) + " - To do list");
     }
 
     private void initInstance() {
@@ -67,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinder.layoutTab.tabLayout.setupWithViewPager(mainBinder.pager);
 
         /* init tab indicator color */
-        mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.colorRed));
+        mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(MainActivity.this, R.color.itemTextColor));
 
 
         /* set all tab's custom view */
@@ -85,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinder.layoutTab.tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
                 mainBinder.layoutTab.tabLayout.setSelectedTabIndicatorColor(
-                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == BaseTodoFragment.ONE ? R.color.colorRed : R.color.colorBlue));
+                    ContextCompat.getColor(MainActivity.this, tab.getPosition() == BaseTodoFragment.ONE ? R.color.itemTextColor : R.color.colorRed ));
                 mainBinder.pager.setCurrentItem(tab.getPosition());
             }
 
@@ -101,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         /* Initial selected color state */
         mainBinder.layoutTab.tabLayout.getTabAt(0).getCustomView().setSelected(true);
 
-        /* selected first tab*/
+        /* selected first tab */
         mainBinder.pager.setCurrentItem(BaseTodoFragment.ONE);
     }
 

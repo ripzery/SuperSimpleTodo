@@ -5,6 +5,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/Toolbar"
         android:layout_height="?attr/actionBarSize"
         tools:showIn="@layout/activity_main"/>
 </layout>

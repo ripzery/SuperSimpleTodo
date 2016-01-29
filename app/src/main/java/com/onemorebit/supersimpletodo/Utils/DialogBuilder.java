@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.onemorebit.supersimpletodo.Fragments.BaseTodoFragment;
 import com.onemorebit.supersimpletodo.R;
 
@@ -18,10 +19,11 @@ public class DialogBuilder {
             .cancelable(true)
             .positiveText("Set")
             .negativeText("Cancel")
-            .positiveColor(ContextCompat.getColor(Contextor.getInstance().getContext(), tabNumber == BaseTodoFragment.ONE ? R.color.colorBlue : R.color.colorRed))
-            .negativeColor(ContextCompat.getColor(Contextor.getInstance().getContext(), R.color.colorTextPrimary))
+            .negativeColor(ContextCompat.getColor(context, R.color.colorDialogNegative))
+            .positiveColor(ContextCompat.getColor(context, R.color.colorPrimary))
             .onNegative(cancelCb)
             .onPositive(submitCb)
+            .theme(Theme.LIGHT)
             .build();
     }
 }

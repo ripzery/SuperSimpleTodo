@@ -5,14 +5,20 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimaryInverse</item>
     </style>
 
     <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccent">@color/itemTextColor</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
     </style>
 
     <style name="CustomEditText">
@@ -34,18 +40,19 @@
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:hint">@string/et_enter_item_hint</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textColorHint">@color/colorTextSecondary</item>
     </style>
 
     <style name="EnterTodoEditText.MaterialEditText">
-        <item name="met_textColor">@color/colorPrimary</item>
+        <item name="met_textColor">@color/colorTextPrimary</item>
         <item name="met_textColorHint">@color/colorTextSecondary</item>
-        <item name="met_floatingLabel">none</item>
+        <item name="met_floatingLabel">highlight</item>
         <item name="met_floatingLabelAnimating">true</item>
         <item name="met_hideUnderline">true</item>
-        <item name="met_floatingLabelTextColor">@color/colorBlue</item>
-        <item name="met_primaryColor">@color/colorBlue</item>
-        <item name="met_baseColor">@color/colorBlue</item>
+        <item name="met_floatingLabelTextColor">@color/colorPrimary</item>
+        <item name="met_primaryColor">@color/colorPrimary</item>
+        <item name="met_baseColor">@color/colorPrimary</item>
     </style>
-
 
 </resources>

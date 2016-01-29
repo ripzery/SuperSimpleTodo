@@ -2,7 +2,7 @@
 <resources>
 
     <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccent">@color/itemTextColor</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

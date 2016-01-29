@@ -94,20 +94,20 @@ public class TodoStateColorBinding {
     public static int getColorView(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
-                return R.color.colorBlue;
+                return R.color.colorPrimary;
             case BaseTodoFragment.TWO:
                 return R.color.colorRed;
             default:
-                return R.color.colorBlue;
+                return R.color.itemTextColor;
         }
     }
 
     private static ColorStateList getTabTextColor(int tabNumber) {
         switch (tabNumber) {
             case BaseTodoFragment.ONE:
-                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_red);
-            case BaseTodoFragment.TWO:
                 return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
+            case BaseTodoFragment.TWO:
+                return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_red);
             default:
                 return ContextCompat.getColorStateList(Contextor.getInstance().getContext(), R.color.selector_tab_color_blue);
         }

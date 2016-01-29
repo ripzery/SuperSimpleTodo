@@ -29,7 +29,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
-        tabTitles = new String[] {context.getString(R.string.tab_two_title), context.getString(R.string.tab_one_title),  "Work" };
+        tabTitles = new String[] {context.getString(R.string.tab_one_title), context.getString(R.string.tab_two_title),  "Work" };
     }
 
     @Override public int getCount() {
@@ -39,9 +39,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override public Fragment getItem(int position) {
         switch (position) {
             case TAB_ONE:
-                return TwoTodoFragment.newInstance();
-            case TAB_TWO:
                 return OneTodoFragment.newInstance();
+            case TAB_TWO:
+                return TwoTodoFragment.newInstance();
             default:
                 return OneTodoFragment.newInstance();
         }

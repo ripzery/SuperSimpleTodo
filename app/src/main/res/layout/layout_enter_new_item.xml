@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:met="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".MainActivity">
 
@@ -20,27 +21,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:background="@drawable/layout_enter_item"
         android:layout_marginLeft="@dimen/layout_input_margin"
         android:layout_marginRight="@dimen/layout_input_margin"
         android:layout_marginBottom="@dimen/layout_input_margin"
+        android:background="@drawable/layout_enter_item"
         android:id="@+id/layoutEnterDesc"
         tools:showIn="@layout/activity_main">
 
-        <MultiAutoCompleteTextView
+        <com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView
             android:id="@+id/etEnterDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="text"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
-            android:textCursorDrawable="@null"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif"
             android:background="@android:color/transparent"
-            android:hint="@string/et_enter_item_hint"
+            met_helperText="@string/tv_hint_command_remind"
+            met_helperTextColor="@color/colorTextPrimary"
             android:textSize="18sp"
-            android:textColor="@{tabNumber}"/>
+            style="@style/EnterTodoEditText.MaterialEditText"/>
 
         <ImageButton
             android:id="@+id/ibAdd"

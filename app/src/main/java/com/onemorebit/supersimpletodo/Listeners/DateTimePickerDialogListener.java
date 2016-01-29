@@ -23,14 +23,14 @@ public abstract class DateTimePickerDialogListener implements DatePickerDialog.O
     public DateTimePickerDialogListener(Activity activity, int tabNumber) {
         this.activity = activity;
         this.tabNumber = tabNumber;
-        this.dialogColor = ContextCompat.getColor(activity, TodoStateColorBinding.getColorView(tabNumber));
+        this.dialogColor = ContextCompat.getColor(activity, TodoStateColorBinding.getColorView(0));
     }
 
     public void show() {
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
         dpd.setMinDate(Calendar.getInstance());
-        dpd.setThemeDark(true);
+        dpd.setThemeDark(false);
         dpd.setAccentColor(dialogColor);
         dpd.show(activity.getFragmentManager(), "DatePickerDialog");
     }
@@ -45,7 +45,7 @@ public abstract class DateTimePickerDialogListener implements DatePickerDialog.O
         Calendar now = Calendar.getInstance();
         TimePickerDialog dpd = TimePickerDialog.newInstance(this, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true);
         dpd.setMinTime(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), 0);
-        dpd.setThemeDark(true);
+        dpd.setThemeDark(false);
         dpd.setAccentColor(dialogColor);
         dpd.show(activity.getFragmentManager(), "ShowPickerDialog");
     }
